@@ -10,13 +10,16 @@
     {
         returnUrl = query["returnUrl"];
     }
+
+    var user = await UserManager.GetUserAsync(User);
+    string displayName = user != null ? $"{user.FirstName}" : string.Empty;
 }
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity!.Name!</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @displayName!</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">

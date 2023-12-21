@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using GhostMetrics.Domain.Constants;
+﻿using GhostMetrics.Domain.Constants;
 using GhostMetrics.Domain.Entities;
 using GhostMetrics.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
