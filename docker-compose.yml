@@ -1,0 +1,19 @@
+version: '3.5'
+
+
+services:
+  pg_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ghostMetrics
+      POSTGRES_PASSWORD: SomeSecretPassword
+      PGDATA: /data/postgres
+    volumes:
+       - postgres-db:/data/postgres
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-db:
+    driver: local
+
