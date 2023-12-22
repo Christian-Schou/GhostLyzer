@@ -1,6 +1,4 @@
-using GhostMetrics.Core.Domain.Events;
-
-namespace GhostMetrics.Core.Domain.Entities.Sites;
+namespace GhostMetrics.Core.Domain.Entities.GhostSites;
 
 public class GhostSite : BaseAuditableEntity
 {
@@ -20,4 +18,7 @@ public class GhostSite : BaseAuditableEntity
             _indexed = value;
         }
     }
+
+    public GhostSiteIntegrationDetails IntegrationDetails { get; set; } = new();
+    public GhostSiteList List { get; set; } = null!;
 }

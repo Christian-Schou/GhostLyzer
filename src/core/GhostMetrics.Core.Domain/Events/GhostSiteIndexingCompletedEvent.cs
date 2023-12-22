@@ -1,4 +1,4 @@
-using GhostMetrics.Core.Domain.Entities.Sites;
+using GhostMetrics.Core.Domain.Entities.GhostSites;
 
 namespace GhostMetrics.Core.Domain.Events;
 
