@@ -1,0 +1,1 @@
+global using GhostMetrics.Core.Domain.Common;
