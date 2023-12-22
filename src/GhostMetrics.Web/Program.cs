@@ -1,5 +1,6 @@
 using GhostMetrics.Infrastructure;
 using GhostMetrics.Infrastructure.Data;
+using GhostMetrics.Infrastructure.Identity;
 using GhostMetrics.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapIdentityApi<ApplicationUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
