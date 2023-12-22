@@ -11,12 +11,19 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="FluentValidation.AspNetCore" />
+        <PackageReference Include="ZymLabs.NSwag.FluentValidation.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\core\GhostMetrics.Core.Application\GhostMetrics.Core.Application.csproj" />
+      <ProjectReference Include="..\core\GhostMetrics.Core.Domain\GhostMetrics.Core.Domain.csproj" />
     </ItemGroup>
 
 </Project>
