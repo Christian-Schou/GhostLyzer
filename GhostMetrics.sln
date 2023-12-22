@@ -4,13 +4,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{C2532C6B-0D4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhostMetrics.Infrastructure", "src\GhostMetrics.Infrastructure\GhostMetrics.Infrastructure.csproj", "{5EE51EC7-CA99-48E4-B6D0-025F693716D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhostMetrics.Web", "src\GhostMetrics.Web\GhostMetrics.Web.csproj", "{EF42D113-3454-4474-8933-84CCD08649C5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3456222D-244D-44C2-9256-300469D72E57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhostMetrics.Core.Domain", "src\core\GhostMetrics.Core.Domain\GhostMetrics.Core.Domain.csproj", "{07AF0978-0FFF-4876-AA43-4991A18C4242}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhostMetrics.Core.Application", "src\core\GhostMetrics.Core.Application\GhostMetrics.Core.Application.csproj", "{A7438CE1-0106-4F70-8C2D-0DB9F1C0E144}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{232548C1-834E-4DE4-B5F6-5F301F438EFC}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GhostMetrics.Web", "src\GhostMetrics.Web\GhostMetrics.Web.csproj", "{AA3FDFAD-F238-48D7-B22B-327B0B4C1C27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,20 +25,16 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5EE51EC7-CA99-48E4-B6D0-025F693716D8} = {C2532C6B-0D47-4CBE-81CB-467DDBC02612}
-		{EF42D113-3454-4474-8933-84CCD08649C5} = {C2532C6B-0D47-4CBE-81CB-467DDBC02612}
 		{3456222D-244D-44C2-9256-300469D72E57} = {C2532C6B-0D47-4CBE-81CB-467DDBC02612}
 		{07AF0978-0FFF-4876-AA43-4991A18C4242} = {3456222D-244D-44C2-9256-300469D72E57}
 		{A7438CE1-0106-4F70-8C2D-0DB9F1C0E144} = {3456222D-244D-44C2-9256-300469D72E57}
+		{AA3FDFAD-F238-48D7-B22B-327B0B4C1C27} = {C2532C6B-0D47-4CBE-81CB-467DDBC02612}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5EE51EC7-CA99-48E4-B6D0-025F693716D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5EE51EC7-CA99-48E4-B6D0-025F693716D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE51EC7-CA99-48E4-B6D0-025F693716D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE51EC7-CA99-48E4-B6D0-025F693716D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF42D113-3454-4474-8933-84CCD08649C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF42D113-3454-4474-8933-84CCD08649C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF42D113-3454-4474-8933-84CCD08649C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF42D113-3454-4474-8933-84CCD08649C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07AF0978-0FFF-4876-AA43-4991A18C4242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07AF0978-0FFF-4876-AA43-4991A18C4242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07AF0978-0FFF-4876-AA43-4991A18C4242}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,5 +43,9 @@ Global
 		{A7438CE1-0106-4F70-8C2D-0DB9F1C0E144}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7438CE1-0106-4F70-8C2D-0DB9F1C0E144}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7438CE1-0106-4F70-8C2D-0DB9F1C0E144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3FDFAD-F238-48D7-B22B-327B0B4C1C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3FDFAD-F238-48D7-B22B-327B0B4C1C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA3FDFAD-F238-48D7-B22B-327B0B4C1C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3FDFAD-F238-48D7-B22B-327B0B4C1C27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
