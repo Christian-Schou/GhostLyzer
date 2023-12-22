@@ -13,7 +13,7 @@ public class LookupDto
         {
             CreateMap<GhostSiteList, LookupDto>();
             CreateMap<GhostSite, LookupDto>();
-            CreateMap<GhostSiteIntegrationDetails, LookupDto>();
+            CreateMap<GhostSiteIntegrationDetail, LookupDto>();
         }
     }
 }

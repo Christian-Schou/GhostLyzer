@@ -19,6 +19,6 @@ public class GhostSite : BaseAuditableEntity
         }
     }
 
-    public GhostSiteIntegrationDetails IntegrationDetails { get; set; } = new();
+    public GhostSiteIntegrationDetail IntegrationDetail { get; set; } = new();
     public GhostSiteList List { get; set; } = null!;
 }

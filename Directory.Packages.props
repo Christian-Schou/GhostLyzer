@@ -35,6 +35,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     <PackageVersion Include="NSwag.AspNetCore" Version="14.0.0-preview010" />
     <PackageVersion Include="NSwag.MSBuild" Version="14.0.0-preview010" />
     <PackageVersion Include="nunit" Version="3.14.0" />

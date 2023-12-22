@@ -1,9 +1,12 @@
+using GhostMetrics.Infrastructure;
+using GhostMetrics.Infrastructure.Data;
 using GhostMetrics.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices();
 builder.Services.AddWebServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,10 +18,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    await app.InitializeDatabaseAsync();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 
 var summaries = new[]

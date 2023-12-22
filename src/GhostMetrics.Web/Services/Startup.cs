@@ -1,4 +1,5 @@
 using GhostMetrics.Core.Application.Common.Interfaces;
+using GhostMetrics.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using ZymLabs.NSwag.FluentValidation;
 
@@ -12,7 +13,8 @@ public static class Startup
 
         services.AddHttpContextAccessor();
 
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
 
