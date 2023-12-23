@@ -21,6 +21,6 @@ public class CreateGhostSiteListCommandValidator : AbstractValidator<CreateGhost
     public async Task<bool> BeUniqueTitle(string title, CancellationToken cancellationToken)
     {
         return await _context.GhostSiteLists
-            .AllAsync(x => x.Title != title, cancellationToken);
+			.AllAsync(x => x.Title != title, cancellationToken);
     }
 }

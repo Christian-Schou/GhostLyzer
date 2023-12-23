@@ -57,6 +57,32 @@
         }
       }
     },
+    "/api/GhostSiteLists/{id}": {
+      "delete": {
+        "tags": [
+          "GhostSiteLists"
+        ],
+        "operationId": "DeleteGhostSiteList",
+        "parameters": [
+          {
+            "name": "id",
+            "x-originalName": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Users/register": {
       "post": {
         "tags": [
