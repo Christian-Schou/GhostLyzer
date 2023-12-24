@@ -1,5 +1,7 @@
 using GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.CreateGhostSiteList;
 using GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.DeleteGhostSiteList;
+using GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.PurgeGhostSiteLists;
+using GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.UpdateGhostSiteList;
 using GhostMetrics.Core.Application.Features.GhostSiteLists.Queries.GetGhostSites;
 
 namespace GhostMetrics.Web.Endpoints;
@@ -12,7 +14,8 @@ public class GhostSiteLists : EndpointGroupBase
             .AllowAnonymous()
             .MapGet(GetGhostSiteLists)
             .MapPost(CreateGhostSiteList)
-            .MapDelete(DeleteGhostSiteList, "{id}" );
+            .MapPut(UpdateGhostSiteList, "{id}")
+            .MapDelete(DeleteGhostSiteList, "{id}");
     }
 
     public async Task<GhostSitesVm> GetGhostSiteLists(ISender sender)
@@ -28,6 +31,19 @@ public class GhostSiteLists : EndpointGroupBase
     public async Task<IResult> DeleteGhostSiteList(ISender sender, Guid Id)
     {
         await sender.Send(new DeleteGhostSiteListCommand(Id));
+        return Results.NoContent();
+    }
+
+    public async Task<IResult> UpdateGhostSiteList(ISender sender, Guid id, UpdateGhostSiteListCommand command)
+    {
+        if(id != command.Id) return Results.BadRequest();
+        await sender.Send(command);
+        return Results.NoContent();
+    }
+
+    public async Task<IResult> PurgeGhostSiteLists(ISender sender)
+    {
+        await sender.Send(new PurgeGhostSiteListsCommand());
         return Results.NoContent();
     }
 }

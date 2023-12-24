@@ -18,6 +18,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export interface IGhostSiteListsClient {
     getGhostSiteLists(): Observable<GhostSitesVm>;
     createGhostSiteList(command: CreateGhostSiteListCommand): Observable<string>;
+    updateGhostSiteList(id: string, command: UpdateGhostSiteListCommand): Observable<void>;
     deleteGhostSiteList(id: string): Observable<void>;
 }
 
@@ -126,6 +127,57 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
     
             return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    updateGhostSiteList(id: string, command: UpdateGhostSiteListCommand): Observable<void> {
+        let url_ = this.baseUrl + "/api/GhostSiteLists/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateGhostSiteList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateGhostSiteList(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdateGhostSiteList(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -948,6 +1000,155 @@ export class CreateGhostSiteListCommand implements ICreateGhostSiteListCommand {
 
 export interface ICreateGhostSiteListCommand {
     title: string | undefined;
+}
+
+export class UpdateGhostSiteListCommand implements IUpdateGhostSiteListCommand {
+    id?: string;
+    title?: string | undefined;
+    color?: Color | undefined;
+
+    constructor(data?: IUpdateGhostSiteListCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["Id"];
+            this.title = _data["Title"];
+            this.color = _data["Color"] ? Color.fromJS(_data["Color"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdateGhostSiteListCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateGhostSiteListCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id;
+        data["Title"] = this.title;
+        data["Color"] = this.color ? this.color.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUpdateGhostSiteListCommand {
+    id?: string;
+    title?: string | undefined;
+    color?: Color | undefined;
+}
+
+export abstract class ValueObject implements IValueObject {
+
+    constructor(data?: IValueObject) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): ValueObject {
+        data = typeof data === 'object' ? data : {};
+        throw new Error("The abstract class 'ValueObject' cannot be instantiated.");
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface IValueObject {
+}
+
+export class Color extends ValueObject implements IColor {
+    white?: Color;
+    red?: Color;
+    orange?: Color;
+    yellow?: Color;
+    green?: Color;
+    blue?: Color;
+    purple?: Color;
+    grey?: Color;
+    code?: string;
+    supportedColours?: Color[];
+
+    constructor(data?: IColor) {
+        super(data);
+    }
+
+    override init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.white = _data["White"] ? Color.fromJS(_data["White"]) : <any>undefined;
+            this.red = _data["Red"] ? Color.fromJS(_data["Red"]) : <any>undefined;
+            this.orange = _data["Orange"] ? Color.fromJS(_data["Orange"]) : <any>undefined;
+            this.yellow = _data["Yellow"] ? Color.fromJS(_data["Yellow"]) : <any>undefined;
+            this.green = _data["Green"] ? Color.fromJS(_data["Green"]) : <any>undefined;
+            this.blue = _data["Blue"] ? Color.fromJS(_data["Blue"]) : <any>undefined;
+            this.purple = _data["Purple"] ? Color.fromJS(_data["Purple"]) : <any>undefined;
+            this.grey = _data["Grey"] ? Color.fromJS(_data["Grey"]) : <any>undefined;
+            this.code = _data["Code"];
+            if (Array.isArray(_data["SupportedColours"])) {
+                this.supportedColours = [] as any;
+                for (let item of _data["SupportedColours"])
+                    this.supportedColours!.push(Color.fromJS(item));
+            }
+        }
+    }
+
+    static override fromJS(data: any): Color {
+        data = typeof data === 'object' ? data : {};
+        let result = new Color();
+        result.init(data);
+        return result;
+    }
+
+    override toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["White"] = this.white ? this.white.toJSON() : <any>undefined;
+        data["Red"] = this.red ? this.red.toJSON() : <any>undefined;
+        data["Orange"] = this.orange ? this.orange.toJSON() : <any>undefined;
+        data["Yellow"] = this.yellow ? this.yellow.toJSON() : <any>undefined;
+        data["Green"] = this.green ? this.green.toJSON() : <any>undefined;
+        data["Blue"] = this.blue ? this.blue.toJSON() : <any>undefined;
+        data["Purple"] = this.purple ? this.purple.toJSON() : <any>undefined;
+        data["Grey"] = this.grey ? this.grey.toJSON() : <any>undefined;
+        data["Code"] = this.code;
+        if (Array.isArray(this.supportedColours)) {
+            data["SupportedColours"] = [];
+            for (let item of this.supportedColours)
+                data["SupportedColours"].push(item.toJSON());
+        }
+        super.toJSON(data);
+        return data;
+    }
+}
+
+export interface IColor extends IValueObject {
+    white?: Color;
+    red?: Color;
+    orange?: Color;
+    yellow?: Color;
+    green?: Color;
+    blue?: Color;
+    purple?: Color;
+    grey?: Color;
+    code?: string;
+    supportedColours?: Color[];
 }
 
 export class ProblemDetails implements IProblemDetails {

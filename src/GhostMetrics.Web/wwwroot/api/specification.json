@@ -58,6 +58,41 @@
       }
     },
     "/api/GhostSiteLists/{id}": {
+      "put": {
+        "tags": [
+          "GhostSiteLists"
+        ],
+        "operationId": "UpdateGhostSiteList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGhostSiteListCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
       "delete": {
         "tags": [
           "GhostSiteLists"
@@ -540,6 +575,79 @@
             "nullable": true
           }
         }
+      },
+      "UpdateGhostSiteListCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true
+          },
+          "Color": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Color"
+              }
+            ]
+          }
+        }
+      },
+      "Color": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ValueObject"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "White": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Red": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Orange": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Yellow": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Green": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Blue": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Purple": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Grey": {
+                "$ref": "#/components/schemas/Color"
+              },
+              "Code": {
+                "type": "string"
+              },
+              "SupportedColours": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Color"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ValueObject": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false
       },
       "HttpValidationProblemDetails": {
         "allOf": [
