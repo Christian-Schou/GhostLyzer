@@ -13,14 +13,14 @@ public class CreateGhostSiteListCommandValidator : AbstractValidator<CreateGhost
         RuleFor(x => x.Title)
             .NotEmpty()
             .MaximumLength(200)
-            .MustAsync(BeUniqueTitle)
+            .MustAsync(BeAUniqueTitle)
                 .WithMessage("'{PropertyName}' must be unique.")
                 .WithErrorCode("Unique");
     }
 
-    public async Task<bool> BeUniqueTitle(string title, CancellationToken cancellationToken)
+    public async Task<bool> BeAUniqueTitle(string title, CancellationToken cancellationToken)
     {
-        return await _context.GhostSiteLists
+		return await _context.GhostSiteLists
 			.AllAsync(x => x.Title != title, cancellationToken);
-    }
+	}
 }
