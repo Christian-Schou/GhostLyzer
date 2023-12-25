@@ -131,6 +131,39 @@
         }
       }
     },
+    "/api/GhostSites": {
+      "post": {
+        "tags": [
+          "GhostSites"
+        ],
+        "operationId": "CreateGhostSite",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGhostSiteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/register": {
       "post": {
         "tags": [
@@ -661,6 +694,44 @@
         "type": "object",
         "x-abstract": true,
         "additionalProperties": false
+      },
+      "CreateGhostSiteCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Title",
+          "ApiUrl",
+          "ContentApiKey",
+          "AdminApiKey"
+        ],
+        "properties": {
+          "ListId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "Title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0,
+            "nullable": true
+          },
+          "Note": {
+            "type": "string",
+            "nullable": true
+          },
+          "ApiUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "ContentApiKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdminApiKey": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "HttpValidationProblemDetails": {
         "allOf": [

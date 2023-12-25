@@ -20,5 +20,7 @@ public class GhostSite : BaseAuditableEntity
     }
 
     public GhostSiteIntegrationDetail IntegrationDetail { get; set; } = new();
+    
+    public Guid ListId { get; set; }
     public GhostSiteList List { get; set; } = null!;
 }
