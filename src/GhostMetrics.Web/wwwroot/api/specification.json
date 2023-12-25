@@ -118,6 +118,19 @@
         }
       }
     },
+    "/api/GhostSiteLists/purge": {
+      "delete": {
+        "tags": [
+          "GhostSiteLists"
+        ],
+        "operationId": "PurgeGhostSiteLists",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Users/register": {
       "post": {
         "tags": [

@@ -15,7 +15,8 @@ public class GhostSiteLists : EndpointGroupBase
             .MapGet(GetGhostSiteLists)
             .MapPost(CreateGhostSiteList)
             .MapPut(UpdateGhostSiteList, "{id}")
-            .MapDelete(DeleteGhostSiteList, "{id}");
+            .MapDelete(DeleteGhostSiteList, "{id}")
+            .MapDelete(PurgeGhostSiteLists, "purge");
     }
 
     public async Task<GhostSitesVm> GetGhostSiteLists(ISender sender)
