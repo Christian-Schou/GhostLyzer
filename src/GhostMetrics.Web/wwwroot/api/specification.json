@@ -6,6 +6,41 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/GhostApi/{siteId}": {
+      "get": {
+        "tags": [
+          "GhostApi"
+        ],
+        "operationId": "GetGhostPosts",
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GhostApiPost"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/GhostSiteLists": {
       "get": {
         "tags": [
@@ -118,7 +153,7 @@
         }
       }
     },
-    "/api/GhostSiteLists/purge": {
+    "/api/GhostSiteLists/all": {
       "delete": {
         "tags": [
           "GhostSiteLists"
@@ -132,6 +167,56 @@
       }
     },
     "/api/GhostSites": {
+      "get": {
+        "tags": [
+          "GhostSites"
+        ],
+        "operationId": "GetGhostSites",
+        "parameters": [
+          {
+            "name": "ListId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedListOfGhsotSiteBriefDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "GhostSites"
@@ -157,6 +242,38 @@
                 "schema": {
                   "type": "string",
                   "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/GhostSites/{id}": {
+      "get": {
+        "tags": [
+          "GhostSites"
+        ],
+        "operationId": "GetGhostSite",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GhostSiteDto2"
                 }
               }
             }
@@ -551,6 +668,98 @@
   },
   "components": {
     "schemas": {
+      "GhostApiPost": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "uuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "feature_image": {
+            "type": "string",
+            "nullable": true
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "visibility": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "custom_excerpt": {
+            "type": "string",
+            "nullable": true
+          },
+          "canonical_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "excerpt": {
+            "type": "string",
+            "nullable": true
+          },
+          "reading_time": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "access": {
+            "type": "boolean"
+          },
+          "og_title": {
+            "type": "string",
+            "nullable": true
+          },
+          "og_description": {
+            "type": "string",
+            "nullable": true
+          },
+          "twitter_title": {
+            "type": "string",
+            "nullable": true
+          },
+          "twitter_description": {
+            "type": "string",
+            "nullable": true
+          },
+          "meta_title": {
+            "type": "string",
+            "nullable": true
+          },
+          "meta_description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "GhostSitesVm": {
         "type": "object",
         "additionalProperties": false,
@@ -694,6 +903,114 @@
         "type": "object",
         "x-abstract": true,
         "additionalProperties": false
+      },
+      "PaginatedListOfGhsotSiteBriefDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GhsotSiteBriefDto"
+            }
+          },
+          "PageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TotalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "HasPreviousPage": {
+            "type": "boolean"
+          },
+          "HasNextPage": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GhsotSiteBriefDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "ListId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true
+          },
+          "Indexed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GhostSiteDto2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "ListId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "Title": {
+            "type": "string",
+            "nullable": true
+          },
+          "Note": {
+            "type": "string",
+            "nullable": true
+          },
+          "Paused": {
+            "type": "boolean"
+          },
+          "LastIndexed": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Indexed": {
+            "type": "boolean"
+          },
+          "IntegrationDetail": {
+            "$ref": "#/components/schemas/GhostSiteIntegrationDetailDto"
+          }
+        }
+      },
+      "GhostSiteIntegrationDetailDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "ApiUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "ContentApiKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "AdminApiKey": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "CreateGhostSiteCommand": {
         "type": "object",
