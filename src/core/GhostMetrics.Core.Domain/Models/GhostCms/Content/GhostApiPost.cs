@@ -5,10 +5,10 @@ namespace GhostMetrics.Core.Domain.Models.GhostCms.Content;
 public class GhostPostsApiResponse
 {
     [JsonPropertyName("posts")]
-    public List<GhostApiPost>? ApiPosts { get; set; }
+    public List<GhostApiPost>? ApiPosts { get; init; }
     
     [JsonPropertyName("meta")]
-    public Meta? Meta { get; set; }
+    public Meta? Meta { get; init; }
 }
 
 public class GhostApiPost
