@@ -1500,7 +1500,7 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
     paused?: boolean;
     lastIndexed?: Date;
     indexed?: boolean;
-    integrationDetail?: GhostSiteIntegrationDetailDto;
+    integrationDetails?: GhostSiteIntegrationDetailDto;
 
     constructor(data?: IGhostSiteDto2) {
         if (data) {
@@ -1520,7 +1520,7 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
             this.paused = _data["Paused"];
             this.lastIndexed = _data["LastIndexed"] ? new Date(_data["LastIndexed"].toString()) : <any>undefined;
             this.indexed = _data["Indexed"];
-            this.integrationDetail = _data["IntegrationDetail"] ? GhostSiteIntegrationDetailDto.fromJS(_data["IntegrationDetail"]) : <any>undefined;
+            this.integrationDetails = _data["IntegrationDetails"] ? GhostSiteIntegrationDetailDto.fromJS(_data["IntegrationDetails"]) : <any>undefined;
         }
     }
 
@@ -1540,7 +1540,7 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
         data["Paused"] = this.paused;
         data["LastIndexed"] = this.lastIndexed ? this.lastIndexed.toISOString() : <any>undefined;
         data["Indexed"] = this.indexed;
-        data["IntegrationDetail"] = this.integrationDetail ? this.integrationDetail.toJSON() : <any>undefined;
+        data["IntegrationDetails"] = this.integrationDetails ? this.integrationDetails.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -1553,7 +1553,7 @@ export interface IGhostSiteDto2 {
     paused?: boolean;
     lastIndexed?: Date;
     indexed?: boolean;
-    integrationDetail?: GhostSiteIntegrationDetailDto;
+    integrationDetails?: GhostSiteIntegrationDetailDto;
 }
 
 export class GhostSiteIntegrationDetailDto implements IGhostSiteIntegrationDetailDto {

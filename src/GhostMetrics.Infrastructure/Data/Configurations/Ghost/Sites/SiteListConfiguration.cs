@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GhostMetrics.Infrastructure.Data.Configurations.Ghost.Sites;
 
-public class GhostSiteListConfiguration : IEntityTypeConfiguration<SiteList>
+public class SiteListConfiguration : IEntityTypeConfiguration<SiteList>
 {
     public void Configure(EntityTypeBuilder<SiteList> builder)
     {

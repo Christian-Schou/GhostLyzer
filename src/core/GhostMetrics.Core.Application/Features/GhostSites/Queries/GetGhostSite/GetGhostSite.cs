@@ -19,8 +19,8 @@ public class GetGhostSiteQueryHandler : IRequestHandler<GetGhostSiteQuery, Ghost
     {
         return await _context.Sites
             .AsNoTracking()
+            .Include(x => x.IntegrationDetails)
             .ProjectTo<GhostSiteDto>(_mapper.ConfigurationProvider)
-            //.Where(x => x.Id == request.Id)
             .FirstAsync(x => x.Id == request.Id, cancellationToken);
     }
 }

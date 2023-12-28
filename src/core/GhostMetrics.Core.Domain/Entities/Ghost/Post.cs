@@ -18,9 +18,10 @@ public class Post : BaseEntity<Guid>
     public int ReadingTime { get; set; }
     public string? Visibility { get; set; }
 
-    public PostSeo Seo { get; set; } = new();
-    public List<PostAnalytics> Analytics { get; set; } = new();
-    public List<PostAuthor> PostAuthors { get; set; } = new();
+    public PostSeo? Seo { get; set; }
+    public PostAnalytics? Analytics { get; set; }
+    public List<PostAuthor>? PostAuthors { get; set; }
+    public List<PostTag>? PostTags { get; set; }
     
     // Foreign key for the Site
     public Guid SiteId { get; set; }

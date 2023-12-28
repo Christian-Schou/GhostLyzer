@@ -858,7 +858,7 @@
           "Indexed": {
             "type": "boolean"
           },
-          "IntegrationDetail": {
+          "IntegrationDetails": {
             "$ref": "#/components/schemas/GhostSiteIntegrationDetailDto"
           }
         }

@@ -18,7 +18,7 @@ public class GhostSiteDto
     
     public bool Indexed { get; init; }
 
-    public GhostSiteIntegrationDetailDto IntegrationDetail { get; init; } = new();
+    public GhostSiteIntegrationDetailDto IntegrationDetails { get; init; } = new();
 
     public class Mapping : Profile
     {
@@ -32,9 +32,7 @@ public class GhostSiteDto
 public class GhostSiteIntegrationDetailDto
 {
     public Guid Id { get; init; }
-    
     public string? ApiUrl { get; init; }
-    
     public string? ContentApiKey { get; init; }
     
     public string? AdminApiKey { get; init; }

@@ -14,5 +14,10 @@ public class AuthorConfiguration : IEntityTypeConfiguration<Author>
             .WithOne(pa => pa.Author)
             .HasForeignKey(pa => pa.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(a => a.Analytics)
+            .WithOne(an => an.Author)
+            .HasForeignKey(an => an.AuthorId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

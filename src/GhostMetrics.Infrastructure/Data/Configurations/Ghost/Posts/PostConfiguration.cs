@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using GhostMetrics.Core.Domain.Entities.Analytics;
 using GhostMetrics.Core.Domain.Entities.Ghost;
 using GhostMetrics.Core.Domain.Entities.SEO;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +18,9 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .HasForeignKey(p => p.SiteId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        builder.HasMany(p => p.Analytics)
+        builder.HasOne(p => p.Analytics)
             .WithOne(pa => pa.Post)
-            .HasForeignKey(pa => pa.PostId);
+            .HasForeignKey<PostAnalytics>(pa => pa.PostId);
 
         builder.HasOne(p => p.Seo)
             .WithOne(seo => seo.Post)
@@ -29,5 +30,10 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .WithOne(pa => pa.Post)
             .HasForeignKey(pa => pa.PostId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(p => p.PostTags)
+            .WithOne(pt => pt.Post)
+            .HasForeignKey(pt => pt.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

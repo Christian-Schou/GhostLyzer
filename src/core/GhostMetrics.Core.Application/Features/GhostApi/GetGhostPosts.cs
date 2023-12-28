@@ -22,7 +22,7 @@ public class GetGhostPostsQueryHandler : IRequestHandler<GetGhostPostsQuery, Lis
         var ghostSiteEntity = await _sender.Send(new GetGhostSiteQuery(request.SiteId), cancellationToken);
         
         return _ghostApi.GetAllGhostPosts(
-            apiUrl: ghostSiteEntity.IntegrationDetail.ApiUrl!,
-            contentApiKey: ghostSiteEntity.IntegrationDetail.ContentApiKey!);
+            apiUrl: ghostSiteEntity.IntegrationDetails.ApiUrl!,
+            contentApiKey: ghostSiteEntity.IntegrationDetails.ContentApiKey!);
     }
 }

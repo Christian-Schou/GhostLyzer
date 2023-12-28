@@ -3,6 +3,7 @@ using System;
 using GhostMetrics.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GhostMetrics.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228184239_AddTagsWithAnalytics")]
+    partial class AddTagsWithAnalytics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,13 +25,13 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.AnalyticsEntry", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.AuthorAnalytics", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BaseAnalyticsId")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Date")
@@ -48,41 +51,72 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BaseAnalyticsId");
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
 
-                    b.ToTable("AnalyticsEntry");
+                    b.ToTable("AuthorAnalytics");
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.BaseAnalytics", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.PostAnalytics", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("character varying(21)");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PageViewsFromSiteCreation")
+                    b.Property<int>("PageViews")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ReturningVisitorsFromSiteCreation")
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ReturningVisitors")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TotalTimeFromCreation")
+                    b.Property<int>("TotalTime")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UniquesFromSiteCreation")
+                    b.Property<int>("Uniques")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BaseAnalytics");
+                    b.HasIndex("PostId");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseAnalytics");
+                    b.ToTable("PostAnalytics");
+                });
 
-                    b.UseTphMappingStrategy();
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.TagAnalytics", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PageViews")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ReturningVisitors")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TotalTime")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Uniques")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("TagAnalytics");
                 });
 
             modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Author", b =>
@@ -605,51 +639,35 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.AuthorAnalytics", b =>
                 {
-                    b.HasBaseType("GhostMetrics.Core.Domain.Entities.Analytics.BaseAnalytics");
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Author", "Author")
+                        .WithOne("Analytics")
+                        .HasForeignKey("GhostMetrics.Core.Domain.Entities.Analytics.AuthorAnalytics", "AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasDiscriminator().HasValue("AuthorAnalytics");
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.PostAnalytics", b =>
                 {
-                    b.HasBaseType("GhostMetrics.Core.Domain.Entities.Analytics.BaseAnalytics");
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Post", "Post")
+                        .WithMany("Analytics")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("PostId")
-                        .IsUnique();
-
-                    b.HasDiscriminator().HasValue("PostAnalytics");
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.TagAnalytics", b =>
                 {
-                    b.HasBaseType("GhostMetrics.Core.Domain.Entities.Analytics.BaseAnalytics");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("TagId")
-                        .IsUnique();
-
-                    b.HasDiscriminator().HasValue("TagAnalytics");
-                });
-
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.AnalyticsEntry", b =>
-                {
-                    b.HasOne("GhostMetrics.Core.Domain.Entities.Analytics.BaseAnalytics", "BaseAnalytics")
-                        .WithMany("Data")
-                        .HasForeignKey("BaseAnalyticsId")
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Tag", "Tag")
+                        .WithMany("Analytics")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BaseAnalytics");
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.IntegrationDetail", b =>
@@ -817,44 +835,6 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.AuthorAnalytics", b =>
-                {
-                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Author", "Author")
-                        .WithMany("Analytics")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.PostAnalytics", b =>
-                {
-                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Post", "Post")
-                        .WithOne("Analytics")
-                        .HasForeignKey("GhostMetrics.Core.Domain.Entities.Analytics.PostAnalytics", "PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.TagAnalytics", b =>
-                {
-                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Tag", "Tag")
-                        .WithOne("Analytics")
-                        .HasForeignKey("GhostMetrics.Core.Domain.Entities.Analytics.TagAnalytics", "TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.BaseAnalytics", b =>
-                {
-                    b.Navigation("Data");
                 });
 
             modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Author", b =>

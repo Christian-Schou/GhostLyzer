@@ -8,11 +8,9 @@ public class PostAnalyticsConfiguration : IEntityTypeConfiguration<PostAnalytics
 {
     public void Configure(EntityTypeBuilder<PostAnalytics> builder)
     {
-        builder.HasKey(x => x.Id);
-        
         builder.HasOne(pa => pa.Post)
-            .WithMany(p => p.Analytics)
-            .HasForeignKey(pa => pa.PostId)
+            .WithOne(p => p.Analytics)
+            .HasForeignKey<PostAnalytics>(pa => pa.PostId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
