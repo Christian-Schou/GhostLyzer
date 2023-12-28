@@ -175,7 +175,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedListOfGhsotSiteBriefDto"
+                  "$ref": "#/components/schemas/PaginatedListOfBriefSiteDto"
                 }
               }
             }
@@ -238,7 +238,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GhostSiteDto2"
+                  "$ref": "#/components/schemas/SiteDto"
                 }
               }
             }
@@ -777,14 +777,14 @@
         "x-abstract": true,
         "additionalProperties": false
       },
-      "PaginatedListOfGhsotSiteBriefDto": {
+      "PaginatedListOfBriefSiteDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "Items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GhsotSiteBriefDto"
+              "$ref": "#/components/schemas/BriefSiteDto"
             }
           },
           "PageNumber": {
@@ -807,7 +807,7 @@
           }
         }
       },
-      "GhsotSiteBriefDto": {
+      "BriefSiteDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -828,7 +828,7 @@
           }
         }
       },
-      "GhostSiteDto2": {
+      "SiteDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

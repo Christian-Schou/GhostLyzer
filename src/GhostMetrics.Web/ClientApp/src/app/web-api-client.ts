@@ -281,9 +281,9 @@ export class SiteListsClient implements ISiteListsClient {
 }
 
 export interface ISitesClient {
-    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfGhsotSiteBriefDto>;
+    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfBriefSiteDto>;
     createGhostSite(command: CreateGhostSiteCommand): Observable<string>;
-    getGhostSite(id: string): Observable<GhostSiteDto2>;
+    getGhostSite(id: string): Observable<SiteDto>;
 }
 
 @Injectable({
@@ -299,7 +299,7 @@ export class SitesClient implements ISitesClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfGhsotSiteBriefDto> {
+    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfBriefSiteDto> {
         let url_ = this.baseUrl + "/api/Sites?";
         if (listId === undefined || listId === null)
             throw new Error("The parameter 'listId' must be defined and cannot be null.");
@@ -330,14 +330,14 @@ export class SitesClient implements ISitesClient {
                 try {
                     return this.processGetGhostSites(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<PaginatedListOfGhsotSiteBriefDto>;
+                    return _observableThrow(e) as any as Observable<PaginatedListOfBriefSiteDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<PaginatedListOfGhsotSiteBriefDto>;
+                return _observableThrow(response_) as any as Observable<PaginatedListOfBriefSiteDto>;
         }));
     }
 
-    protected processGetGhostSites(response: HttpResponseBase): Observable<PaginatedListOfGhsotSiteBriefDto> {
+    protected processGetGhostSites(response: HttpResponseBase): Observable<PaginatedListOfBriefSiteDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -348,7 +348,7 @@ export class SitesClient implements ISitesClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfGhsotSiteBriefDto.fromJS(resultData200);
+            result200 = PaginatedListOfBriefSiteDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -412,7 +412,7 @@ export class SitesClient implements ISitesClient {
         return _observableOf(null as any);
     }
 
-    getGhostSite(id: string): Observable<GhostSiteDto2> {
+    getGhostSite(id: string): Observable<SiteDto> {
         let url_ = this.baseUrl + "/api/Sites/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -434,14 +434,14 @@ export class SitesClient implements ISitesClient {
                 try {
                     return this.processGetGhostSite(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GhostSiteDto2>;
+                    return _observableThrow(e) as any as Observable<SiteDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GhostSiteDto2>;
+                return _observableThrow(response_) as any as Observable<SiteDto>;
         }));
     }
 
-    protected processGetGhostSite(response: HttpResponseBase): Observable<GhostSiteDto2> {
+    protected processGetGhostSite(response: HttpResponseBase): Observable<SiteDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -452,7 +452,7 @@ export class SitesClient implements ISitesClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GhostSiteDto2.fromJS(resultData200);
+            result200 = SiteDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1380,15 +1380,15 @@ export interface IColor extends IValueObject {
     supportedColours?: Color[];
 }
 
-export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSiteBriefDto {
-    items?: GhsotSiteBriefDto[];
+export class PaginatedListOfBriefSiteDto implements IPaginatedListOfBriefSiteDto {
+    items?: BriefSiteDto[];
     pageNumber?: number;
     totalPages?: number;
     totalCount?: number;
     hasPreviousPage?: boolean;
     hasNextPage?: boolean;
 
-    constructor(data?: IPaginatedListOfGhsotSiteBriefDto) {
+    constructor(data?: IPaginatedListOfBriefSiteDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1402,7 +1402,7 @@ export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSi
             if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
                 for (let item of _data["Items"])
-                    this.items!.push(GhsotSiteBriefDto.fromJS(item));
+                    this.items!.push(BriefSiteDto.fromJS(item));
             }
             this.pageNumber = _data["PageNumber"];
             this.totalPages = _data["TotalPages"];
@@ -1412,9 +1412,9 @@ export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSi
         }
     }
 
-    static fromJS(data: any): PaginatedListOfGhsotSiteBriefDto {
+    static fromJS(data: any): PaginatedListOfBriefSiteDto {
         data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfGhsotSiteBriefDto();
+        let result = new PaginatedListOfBriefSiteDto();
         result.init(data);
         return result;
     }
@@ -1435,8 +1435,8 @@ export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSi
     }
 }
 
-export interface IPaginatedListOfGhsotSiteBriefDto {
-    items?: GhsotSiteBriefDto[];
+export interface IPaginatedListOfBriefSiteDto {
+    items?: BriefSiteDto[];
     pageNumber?: number;
     totalPages?: number;
     totalCount?: number;
@@ -1444,13 +1444,13 @@ export interface IPaginatedListOfGhsotSiteBriefDto {
     hasNextPage?: boolean;
 }
 
-export class GhsotSiteBriefDto implements IGhsotSiteBriefDto {
+export class BriefSiteDto implements IBriefSiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
     indexed?: boolean;
 
-    constructor(data?: IGhsotSiteBriefDto) {
+    constructor(data?: IBriefSiteDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1468,9 +1468,9 @@ export class GhsotSiteBriefDto implements IGhsotSiteBriefDto {
         }
     }
 
-    static fromJS(data: any): GhsotSiteBriefDto {
+    static fromJS(data: any): BriefSiteDto {
         data = typeof data === 'object' ? data : {};
-        let result = new GhsotSiteBriefDto();
+        let result = new BriefSiteDto();
         result.init(data);
         return result;
     }
@@ -1485,14 +1485,14 @@ export class GhsotSiteBriefDto implements IGhsotSiteBriefDto {
     }
 }
 
-export interface IGhsotSiteBriefDto {
+export interface IBriefSiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
     indexed?: boolean;
 }
 
-export class GhostSiteDto2 implements IGhostSiteDto2 {
+export class SiteDto implements ISiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
@@ -1502,7 +1502,7 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
     indexed?: boolean;
     integrationDetails?: GhostSiteIntegrationDetailDto;
 
-    constructor(data?: IGhostSiteDto2) {
+    constructor(data?: ISiteDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1524,9 +1524,9 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
         }
     }
 
-    static fromJS(data: any): GhostSiteDto2 {
+    static fromJS(data: any): SiteDto {
         data = typeof data === 'object' ? data : {};
-        let result = new GhostSiteDto2();
+        let result = new SiteDto();
         result.init(data);
         return result;
     }
@@ -1545,7 +1545,7 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
     }
 }
 
-export interface IGhostSiteDto2 {
+export interface ISiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;

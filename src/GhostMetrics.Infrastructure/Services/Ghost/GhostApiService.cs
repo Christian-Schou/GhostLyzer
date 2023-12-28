@@ -6,17 +6,10 @@ namespace GhostMetrics.Infrastructure.Services.Ghost;
 
 public partial class GhostApiService : IGhostApiService
 {
-    private readonly IApplicationDbContext _context;
     private readonly ILogger<GhostApiService> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
 
-    public GhostApiService(
-        IApplicationDbContext context,
-        ILogger<GhostApiService> logger,
-        IHttpClientFactory httpClientFactory)
+    public GhostApiService(ILogger<GhostApiService> logger)
     {
-        _context = context;
         _logger = logger;
-        _httpClientFactory = httpClientFactory;
     }
 }
