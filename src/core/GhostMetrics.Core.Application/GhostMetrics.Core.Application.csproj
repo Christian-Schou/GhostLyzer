@@ -10,4 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GhostMetrics.Core.Domain\GhostMetrics.Core.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Ghost\" />
+  </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@ namespace GhostMetrics.Infrastructure.Services.Ghost;
 
 public partial class GhostApiService
 {
-    public List<Post> GetAllGhostPosts(string baseUrl, string contentApiKey)
+    public List<Post> GetAllPosts(string baseUrl, string contentApiKey)
     {
         try
         {

@@ -18,5 +18,9 @@
     <ItemGroup>
       <ProjectReference Include="..\core\GhostMetrics.Core.Application\GhostMetrics.Core.Application.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Services\GhostMetrics\" />
+    </ItemGroup>
 </Project>
 
