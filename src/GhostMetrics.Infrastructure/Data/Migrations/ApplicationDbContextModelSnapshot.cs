@@ -22,52 +22,67 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSite", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.PostAnalytics", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("Created")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                    b.Property<int>("PageViews")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("Indexed")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("LastIndexed")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ListId")
+                    b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Note")
-                        .HasColumnType("text");
+                    b.Property<int>("ReturningVisitors")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("Paused")
-                        .HasColumnType("boolean");
+                    b.Property<int>("TotalTime")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                    b.Property<int>("Uniques")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ListId");
+                    b.HasIndex("PostId");
 
-                    b.ToTable("GhostSites");
+                    b.ToTable("PostAnalytics");
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteIntegrationDetail", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Author", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GhostAuthorId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.IntegrationDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -101,10 +116,130 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GhostSiteIntegrationDetails");
+                    b.ToTable("SiteIntegrationDetails");
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteList", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Featured")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("FeaturedImagePath")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("GhostPostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ReadingTime")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SiteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Visibility")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.PostAuthor", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PostId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("PostAuthors");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Site", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Indexed")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastIndexed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ListId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Paused")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.ToTable("Sites");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.SiteList", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,7 +264,48 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GhostSiteLists");
+                    b.ToTable("SiteLists");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.SEO.PostSeo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OgImage")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OgTitle")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("XDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("XImage")
+                        .HasColumnType("text");
+
+                    b.Property<string>("XTitle")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId")
+                        .IsUnique();
+
+                    b.ToTable("PostSeo");
                 });
 
             modelBuilder.Entity("GhostMetrics.Infrastructure.Identity.ApplicationUser", b =>
@@ -334,9 +510,61 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSite", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Analytics.PostAnalytics", b =>
                 {
-                    b.HasOne("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteList", "List")
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Post", "Post")
+                        .WithMany("Analytics")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.IntegrationDetail", b =>
+                {
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Site", "Site")
+                        .WithOne("IntegrationDetails")
+                        .HasForeignKey("GhostMetrics.Core.Domain.Entities.Ghost.IntegrationDetail", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Post", b =>
+                {
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Site", "Site")
+                        .WithMany("Posts")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.PostAuthor", b =>
+                {
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Author", "Author")
+                        .WithMany("PostAuthors")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Post", "Post")
+                        .WithMany("PostAuthors")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Site", b =>
+                {
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.SiteList", "List")
                         .WithMany("GhostSites")
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -345,38 +573,38 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                     b.Navigation("List");
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteIntegrationDetail", b =>
-                {
-                    b.HasOne("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSite", "GhostSite")
-                        .WithOne("IntegrationDetail")
-                        .HasForeignKey("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteIntegrationDetail", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GhostSite");
-                });
-
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteList", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.SiteList", b =>
                 {
                     b.OwnsOne("GhostMetrics.Core.Domain.ValueObjects.Color", "Color", b1 =>
                         {
-                            b1.Property<Guid>("GhostSiteListId")
+                            b1.Property<Guid>("SiteListId")
                                 .HasColumnType("uuid");
 
                             b1.Property<string>("Code")
                                 .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.HasKey("GhostSiteListId");
+                            b1.HasKey("SiteListId");
 
-                            b1.ToTable("GhostSiteLists");
+                            b1.ToTable("SiteLists");
 
                             b1.WithOwner()
-                                .HasForeignKey("GhostSiteListId");
+                                .HasForeignKey("SiteListId");
                         });
 
                     b.Navigation("Color")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.SEO.PostSeo", b =>
+                {
+                    b.HasOne("GhostMetrics.Core.Domain.Entities.Ghost.Post", "Post")
+                        .WithOne("Seo")
+                        .HasForeignKey("GhostMetrics.Core.Domain.Entities.SEO.PostSeo", "PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -430,13 +658,30 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSite", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Author", b =>
                 {
-                    b.Navigation("IntegrationDetail")
+                    b.Navigation("PostAuthors");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Post", b =>
+                {
+                    b.Navigation("Analytics");
+
+                    b.Navigation("PostAuthors");
+
+                    b.Navigation("Seo")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.GhostSites.GhostSiteList", b =>
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.Site", b =>
+                {
+                    b.Navigation("IntegrationDetails")
+                        .IsRequired();
+
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("GhostMetrics.Core.Domain.Entities.Ghost.SiteList", b =>
                 {
                     b.Navigation("GhostSites");
                 });

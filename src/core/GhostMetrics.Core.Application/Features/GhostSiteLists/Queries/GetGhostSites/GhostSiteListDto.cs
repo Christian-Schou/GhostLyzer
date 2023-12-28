@@ -1,4 +1,4 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Application.Features.GhostSiteLists.Queries.GetGhostSites;
 
@@ -21,7 +21,7 @@ public class GhostSiteListDto
     {
         public Mapping()
         {
-            CreateMap<GhostSiteList, GhostSiteListDto>()
+            CreateMap<SiteList, GhostSiteListDto>()
                 .ForMember(dest => dest.Sites, src => src.MapFrom(x => x.GhostSites));
         }
     }

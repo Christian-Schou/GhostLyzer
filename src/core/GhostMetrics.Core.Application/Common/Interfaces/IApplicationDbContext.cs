@@ -1,12 +1,18 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<GhostSiteList> GhostSiteLists { get; }
+    DbSet<SiteList> SiteLists { get; }
 
-	DbSet<GhostSite> GhostSites { get; }
+	DbSet<Site> Sites { get; }
+    
+    DbSet<Post> Posts { get; }
+    
+    DbSet<Author> Authors { get; }
+    
+    DbSet<PostAuthor> PostAuthors { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

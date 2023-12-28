@@ -16,7 +16,7 @@ public class PurgeGhostSiteListsCommandHandler : IRequestHandler<PurgeGhostSiteL
 
 	public async Task Handle(PurgeGhostSiteListsCommand request, CancellationToken cancellationToken)
 	{
-		_context.GhostSiteLists.RemoveRange(_context.GhostSiteLists);
+		_context.SiteLists.RemoveRange(_context.SiteLists);
 
 		await _context.SaveChangesAsync(cancellationToken);
 	}

@@ -6,45 +6,10 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/GhostApi/{siteId}": {
+    "/api/SiteLists": {
       "get": {
         "tags": [
-          "GhostApi"
-        ],
-        "operationId": "GetGhostPosts",
-        "parameters": [
-          {
-            "name": "siteId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GhostApiPost"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/GhostSiteLists": {
-      "get": {
-        "tags": [
-          "GhostSiteLists"
+          "SiteLists"
         ],
         "operationId": "GetGhostSiteLists",
         "responses": {
@@ -62,7 +27,7 @@
       },
       "post": {
         "tags": [
-          "GhostSiteLists"
+          "SiteLists"
         ],
         "operationId": "CreateGhostSiteList",
         "requestBody": {
@@ -92,10 +57,10 @@
         }
       }
     },
-    "/api/GhostSiteLists/{id}": {
+    "/api/SiteLists/{id}": {
       "put": {
         "tags": [
-          "GhostSiteLists"
+          "SiteLists"
         ],
         "operationId": "UpdateGhostSiteList",
         "parameters": [
@@ -130,7 +95,7 @@
       },
       "delete": {
         "tags": [
-          "GhostSiteLists"
+          "SiteLists"
         ],
         "operationId": "DeleteGhostSiteList",
         "parameters": [
@@ -153,10 +118,10 @@
         }
       }
     },
-    "/api/GhostSiteLists/all": {
+    "/api/SiteLists/all": {
       "delete": {
         "tags": [
-          "GhostSiteLists"
+          "SiteLists"
         ],
         "operationId": "PurgeGhostSiteLists",
         "responses": {
@@ -166,10 +131,10 @@
         }
       }
     },
-    "/api/GhostSites": {
+    "/api/Sites": {
       "get": {
         "tags": [
-          "GhostSites"
+          "Sites"
         ],
         "operationId": "GetGhostSites",
         "parameters": [
@@ -219,7 +184,7 @@
       },
       "post": {
         "tags": [
-          "GhostSites"
+          "Sites"
         ],
         "operationId": "CreateGhostSite",
         "requestBody": {
@@ -249,10 +214,10 @@
         }
       }
     },
-    "/api/GhostSites/{id}": {
+    "/api/Sites/{id}": {
       "get": {
         "tags": [
-          "GhostSites"
+          "Sites"
         ],
         "operationId": "GetGhostSite",
         "parameters": [
@@ -668,98 +633,6 @@
   },
   "components": {
     "schemas": {
-      "GhostApiPost": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "slug": {
-            "type": "string",
-            "nullable": true
-          },
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "uuid": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "feature_image": {
-            "type": "string",
-            "nullable": true
-          },
-          "featured": {
-            "type": "boolean"
-          },
-          "visibility": {
-            "type": "string",
-            "nullable": true
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "published_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "custom_excerpt": {
-            "type": "string",
-            "nullable": true
-          },
-          "canonical_url": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string",
-            "nullable": true
-          },
-          "excerpt": {
-            "type": "string",
-            "nullable": true
-          },
-          "reading_time": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "access": {
-            "type": "boolean"
-          },
-          "og_title": {
-            "type": "string",
-            "nullable": true
-          },
-          "og_description": {
-            "type": "string",
-            "nullable": true
-          },
-          "twitter_title": {
-            "type": "string",
-            "nullable": true
-          },
-          "twitter_description": {
-            "type": "string",
-            "nullable": true
-          },
-          "meta_title": {
-            "type": "string",
-            "nullable": true
-          },
-          "meta_description": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "GhostSitesVm": {
         "type": "object",
         "additionalProperties": false,

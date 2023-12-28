@@ -3,6 +3,6 @@
     <PackageReference Include="MediatR" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\GhostCms\Admin\" />
+    <Folder Include="Models\Analytics\Umami\" />
   </ItemGroup>
 </Project>

@@ -1,11 +1,11 @@
-namespace GhostMetrics.Core.Domain.Entities.GhostSites;
+namespace GhostMetrics.Core.Domain.Entities.Ghost;
 
-public class GhostSiteIntegrationDetail : BaseAuditableEntity
+public class IntegrationDetail : BaseAuditableEntity
 {
     public string? ApiUrl { get; set; }
     public string? ContentApiKey { get; set; }
     public string? AdminApiKey { get; set; }
 
     public Guid GhostSiteId { get; set; }
-    public GhostSite GhostSite { get; set; } = null!;
+    public Site Site { get; set; } = null!;
 }

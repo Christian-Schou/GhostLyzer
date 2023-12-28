@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GhostMetrics.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreation : Migration
+    public partial class AddPostsAndAuthors : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,24 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GhostSiteLists",
+                name: "Authors",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    GhostAuthorId = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Slug = table.Column<string>(type: "text", nullable: true),
+                    ProfileImage = table.Column<string>(type: "text", nullable: true),
+                    Bio = table.Column<string>(type: "text", nullable: true),
+                    Url = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SiteLists",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -67,7 +84,7 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GhostSiteLists", x => x.Id);
+                    table.PrimaryKey("PK_SiteLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,12 +194,13 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GhostSites",
+                name: "Sites",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Note = table.Column<string>(type: "text", nullable: true),
+                    Note = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     Paused = table.Column<bool>(type: "boolean", nullable: false),
                     LastIndexed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Indexed = table.Column<bool>(type: "boolean", nullable: false),
@@ -194,17 +212,47 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GhostSites", x => x.Id);
+                    table.PrimaryKey("PK_Sites", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GhostSites_GhostSiteLists_ListId",
+                        name: "FK_Sites_SiteLists_ListId",
                         column: x => x.ListId,
-                        principalTable: "GhostSiteLists",
+                        principalTable: "SiteLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "GhostSiteIntegrationDetails",
+                name: "Posts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    GhostPostId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Slug = table.Column<string>(type: "text", nullable: true),
+                    FeaturedImagePath = table.Column<string>(type: "text", nullable: true),
+                    Featured = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: true),
+                    Excerpt = table.Column<string>(type: "text", nullable: true),
+                    ReadingTime = table.Column<int>(type: "integer", nullable: false),
+                    Visibility = table.Column<string>(type: "text", nullable: true),
+                    SiteId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Posts_Sites_SiteId",
+                        column: x => x.SiteId,
+                        principalTable: "Sites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SiteIntegrationDetails",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -219,11 +267,85 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GhostSiteIntegrationDetails", x => x.Id);
+                    table.PrimaryKey("PK_SiteIntegrationDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GhostSiteIntegrationDetails_GhostSites_Id",
+                        name: "FK_SiteIntegrationDetails_Sites_Id",
                         column: x => x.Id,
-                        principalTable: "GhostSites",
+                        principalTable: "Sites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostAnalytics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PostId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PageViews = table.Column<int>(type: "integer", nullable: false),
+                    Uniques = table.Column<int>(type: "integer", nullable: false),
+                    ReturningVisitors = table.Column<int>(type: "integer", nullable: false),
+                    TotalTime = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostAnalytics", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostAnalytics_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostAuthors",
+                columns: table => new
+                {
+                    PostId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostAuthors", x => new { x.PostId, x.AuthorId });
+                    table.ForeignKey(
+                        name: "FK_PostAuthors_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PostAuthors_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostSeo",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    MetaTitle = table.Column<string>(type: "text", nullable: true),
+                    MetaDescription = table.Column<string>(type: "text", nullable: true),
+                    OgImage = table.Column<string>(type: "text", nullable: true),
+                    OgTitle = table.Column<string>(type: "text", nullable: true),
+                    OgDescription = table.Column<string>(type: "text", nullable: true),
+                    XImage = table.Column<string>(type: "text", nullable: true),
+                    XTitle = table.Column<string>(type: "text", nullable: true),
+                    XDescription = table.Column<string>(type: "text", nullable: true),
+                    PostId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostSeo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostSeo_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -266,8 +388,29 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_GhostSites_ListId",
-                table: "GhostSites",
+                name: "IX_PostAnalytics_PostId",
+                table: "PostAnalytics",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostAuthors_AuthorId",
+                table: "PostAuthors",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostSeo_PostId",
+                table: "PostSeo",
+                column: "PostId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_SiteId",
+                table: "Posts",
+                column: "SiteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sites_ListId",
+                table: "Sites",
                 column: "ListId");
         }
 
@@ -290,7 +433,16 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "GhostSiteIntegrationDetails");
+                name: "PostAnalytics");
+
+            migrationBuilder.DropTable(
+                name: "PostAuthors");
+
+            migrationBuilder.DropTable(
+                name: "PostSeo");
+
+            migrationBuilder.DropTable(
+                name: "SiteIntegrationDetails");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -299,10 +451,16 @@ namespace GhostMetrics.Infrastructure.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "GhostSites");
+                name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "GhostSiteLists");
+                name: "Posts");
+
+            migrationBuilder.DropTable(
+                name: "Sites");
+
+            migrationBuilder.DropTable(
+                name: "SiteLists");
         }
     }
 }

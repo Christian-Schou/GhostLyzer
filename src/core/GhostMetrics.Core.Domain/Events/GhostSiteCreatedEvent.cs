@@ -1,13 +1,13 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Domain.Events;
 
 public class GhostSiteCreatedEvent : BaseEvent
 {
-    public GhostSiteCreatedEvent(GhostSite ghostSite)
+    public GhostSiteCreatedEvent(Site site)
     {
-        GhostSite = ghostSite;
+        Site = site;
     }
 
-    public GhostSite GhostSite { get; }
+    public Site Site { get; }
 }

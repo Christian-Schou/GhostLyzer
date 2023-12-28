@@ -16,13 +16,13 @@ namespace GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.DeleteG
 
 		public async Task Handle(DeleteGhostSiteListCommand request, CancellationToken cancellationToken)
 		{
-			var entity = await _context.GhostSiteLists
+			var entity = await _context.SiteLists
 				.Where(list => list.Id == request.Id)
 				.SingleOrDefaultAsync(cancellationToken);
 
 			Guard.Against.NotFound(request.Id, entity);
 
-			_context.GhostSiteLists.Remove(entity);
+			_context.SiteLists.Remove(entity);
 
 			await _context.SaveChangesAsync(cancellationToken);
 		}

@@ -1,8 +1,8 @@
-using GhostMetrics.Core.Domain.Models.GhostCms.Content;
+using GhostSharp.Entities;
 
 namespace GhostMetrics.Core.Application.Services.Ghost;
 
 public interface IGhostApiService
 {
-    public Task<List<GhostApiPost>> GetAllGhostPostsAsync(string apiUrl, string contentApiKey);
+    public List<Post> GetAllGhostPosts(string apiUrl, string contentApiKey);
 }

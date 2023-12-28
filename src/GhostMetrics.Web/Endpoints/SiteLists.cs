@@ -6,7 +6,7 @@ using GhostMetrics.Core.Application.Features.GhostSiteLists.Queries.GetGhostSite
 
 namespace GhostMetrics.Web.Endpoints;
 
-public class GhostSiteLists : EndpointGroupBase
+public class SiteLists : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {

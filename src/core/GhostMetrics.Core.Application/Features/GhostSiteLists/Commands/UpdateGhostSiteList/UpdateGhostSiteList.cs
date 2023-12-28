@@ -21,7 +21,7 @@ namespace GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.UpdateG
 
 		public async Task Handle(UpdateGhostSiteListCommand request, CancellationToken cancellationToken)
 		{
-			var entity = await _context.GhostSiteLists
+			var entity = await _context.SiteLists
 				.FindAsync(new object[] { request.Id }, cancellationToken);
 
 			Guard.Against.NotFound(request.Id, entity);

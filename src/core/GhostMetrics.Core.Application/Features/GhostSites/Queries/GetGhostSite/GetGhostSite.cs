@@ -17,7 +17,7 @@ public class GetGhostSiteQueryHandler : IRequestHandler<GetGhostSiteQuery, Ghost
 
     public async Task<GhostSiteDto> Handle(GetGhostSiteQuery request, CancellationToken cancellationToken)
     {
-        return await _context.GhostSites
+        return await _context.Sites
             .AsNoTracking()
             .ProjectTo<GhostSiteDto>(_mapper.ConfigurationProvider)
             //.Where(x => x.Id == request.Id)

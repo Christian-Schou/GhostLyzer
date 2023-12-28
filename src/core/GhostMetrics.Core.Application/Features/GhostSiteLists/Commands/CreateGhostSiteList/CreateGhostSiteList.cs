@@ -1,5 +1,5 @@
 using GhostMetrics.Core.Application.Common.Interfaces;
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Application.Features.GhostSiteLists.Commands.CreateGhostSiteList;
 
@@ -19,12 +19,12 @@ public class CreateGhostSiteListCommandHandler : IRequestHandler<CreateGhostSite
 
     public async Task<Guid> Handle(CreateGhostSiteListCommand request, CancellationToken cancellationToken)
     {
-        var entity = new GhostSiteList
+        var entity = new SiteList
         {
             Title = request.Title
         };
 
-        _context.GhostSiteLists.Add(entity);
+        _context.SiteLists.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

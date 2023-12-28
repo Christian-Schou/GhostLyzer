@@ -1,5 +1,5 @@
 using GhostMetrics.Core.Application.Common.Interfaces;
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 using GhostMetrics.Core.Domain.Events;
 
 namespace GhostMetrics.Core.Application.Features.GhostSites.Commands.CreateGhostSite;
@@ -26,14 +26,14 @@ public class CreateGhostSiteCommandHandler : IRequestHandler<CreateGhostSiteComm
 
     public async Task<Guid> Handle(CreateGhostSiteCommand request, CancellationToken cancellationToken)
     {
-        var entity = new GhostSite
+        var entity = new Site
         {
             ListId = request.ListId,
             Title = request.Title,
-            Note = request.Note,
+            Note = request.Note ?? "N/A",
             Paused = false,
             Indexed = false,
-            IntegrationDetail = new GhostSiteIntegrationDetail
+            IntegrationDetails = new IntegrationDetail
             {
                 ApiUrl = request.ApiUrl,
                 ContentApiKey = request.ContentApiKey,
@@ -43,7 +43,7 @@ public class CreateGhostSiteCommandHandler : IRequestHandler<CreateGhostSiteComm
         
         entity.AddDomainEvent(new GhostSiteCreatedEvent(entity));
 
-        _context.GhostSites.Add(entity);
+        _context.Sites.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

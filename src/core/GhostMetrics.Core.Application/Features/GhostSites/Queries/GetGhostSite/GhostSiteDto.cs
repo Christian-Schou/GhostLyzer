@@ -1,4 +1,4 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSite;
 
@@ -24,7 +24,7 @@ public class GhostSiteDto
     {
         public Mapping()
         {
-            CreateMap<GhostSite, GhostSiteDto>();
+            CreateMap<Site, GhostSiteDto>();
         }
     }
 }
@@ -43,7 +43,7 @@ public class GhostSiteIntegrationDetailDto
     {
         public Mapping()
         {
-            CreateMap<GhostSiteIntegrationDetail, GhostSiteIntegrationDetailDto>();
+            CreateMap<IntegrationDetail, GhostSiteIntegrationDetailDto>();
         }
     }
 }

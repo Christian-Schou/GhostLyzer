@@ -19,7 +19,7 @@ public class GetGhostSitesQueryHandler : IRequestHandler<GetGhostSitesQuery, Gho
     {
         return new GhostSitesVm
         {
-            Lists = await _context.GhostSiteLists
+            Lists = await _context.SiteLists
                 .AsNoTracking()
                 .ProjectTo<GhostSiteListDto>(_mapper.ConfigurationProvider)
                 .OrderBy(t => t.Title)

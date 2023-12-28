@@ -1,5 +1,5 @@
 using GhostMetrics.Core.Domain.Constants;
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 using GhostMetrics.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -97,19 +97,19 @@ public class ApplicationDbContextInitializer
         }
         
         // Default data
-        if (!_context.GhostSiteLists.Any())
+        if (!_context.SiteLists.Any())
         {
-            _context.GhostSiteLists.Add(new GhostSiteList
+            _context.SiteLists.Add(new SiteList
             {
                 Title = "Default Site List",
                 GhostSites =
                 {
-                    new GhostSite
+                    new Site
                     {
                         Title = "Default Ghost Site",
                         Indexed = false,
                         Paused = true,
-                        IntegrationDetail = new GhostSiteIntegrationDetail
+                        IntegrationDetails = new IntegrationDetail
                         {
                             ApiUrl = "https://your-ghost-site.ghostmetrics",
                             AdminApiKey = "your-admin-api-key-here",

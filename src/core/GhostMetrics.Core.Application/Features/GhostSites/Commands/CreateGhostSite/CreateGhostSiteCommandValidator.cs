@@ -35,8 +35,8 @@ public class CreateGhostSiteCommandValidator : AbstractValidator<CreateGhostSite
 
     public async Task<bool> BeAUniqueApiUrl(string apiUrl, CancellationToken cancellationToken)
     {
-        return await _context.GhostSites
-            .AllAsync(x => x.IntegrationDetail.ApiUrl != apiUrl, cancellationToken);
+        return await _context.Sites
+            .AllAsync(x => x.IntegrationDetails.ApiUrl != apiUrl, cancellationToken);
     }
     
     public bool BeAValidUrl(string uri)

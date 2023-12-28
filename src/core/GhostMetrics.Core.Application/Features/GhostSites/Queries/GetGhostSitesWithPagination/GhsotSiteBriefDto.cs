@@ -1,4 +1,4 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSitesWithPagination;
 
@@ -13,7 +13,7 @@ public class GhsotSiteBriefDto
     {
         public Mapping()
         {
-            CreateMap<GhostSite, GhsotSiteBriefDto>();
+            CreateMap<Site, GhsotSiteBriefDto>();
         }
     }
 }

@@ -24,7 +24,7 @@ public class GetGhostSitesWithPaginationQueryHandler : IRequestHandler<GetGhostS
 
     public async Task<PaginatedList<GhsotSiteBriefDto>> Handle(GetGhostSitesWithPaginationQuery request, CancellationToken cancellationToken)
     {
-        return await _context.GhostSites
+        return await _context.Sites
             .Where(x => x.ListId == request.ListId)
             .OrderBy(x => x.Title)
             .ProjectTo<GhsotSiteBriefDto>(_mapper.ConfigurationProvider)
