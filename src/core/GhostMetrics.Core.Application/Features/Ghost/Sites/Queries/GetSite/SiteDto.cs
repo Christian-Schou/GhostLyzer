@@ -1,8 +1,8 @@
 using GhostMetrics.Core.Domain.Entities.Ghost;
 
-namespace GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSite;
+namespace GhostMetrics.Core.Application.Features.Ghost.Sites.Queries.GetSite;
 
-public class GhostSiteDto
+public class SiteDto
 {
     public Guid Id { get; init; }
     
@@ -24,7 +24,7 @@ public class GhostSiteDto
     {
         public Mapping()
         {
-            CreateMap<Site, GhostSiteDto>();
+            CreateMap<Site, SiteDto>();
         }
     }
 }

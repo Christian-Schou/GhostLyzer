@@ -1,4 +1,4 @@
-using GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSite;
+using GhostMetrics.Core.Application.Features.Ghost.Sites.Queries.GetSite;
 using GhostMetrics.Core.Application.Services.Ghost;
 using GhostSharp.Entities;
 
@@ -21,7 +21,7 @@ public class GetGhostPostsQueryHandler : IRequestHandler<GetGhostPostsQuery, Lis
     {
         var ghostSiteEntity = await _sender.Send(new GetGhostSiteQuery(request.SiteId), cancellationToken);
         
-        return _ghostApi.GetAllGhostPosts(
+        return _ghostApi.GetAllPosts(
             apiUrl: ghostSiteEntity.IntegrationDetails.ApiUrl!,
             contentApiKey: ghostSiteEntity.IntegrationDetails.ContentApiKey!);
     }

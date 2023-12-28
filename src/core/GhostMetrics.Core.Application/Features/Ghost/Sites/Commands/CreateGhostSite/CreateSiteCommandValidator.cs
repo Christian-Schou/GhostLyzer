@@ -1,12 +1,12 @@
 using GhostMetrics.Core.Application.Common.Interfaces;
 
-namespace GhostMetrics.Core.Application.Features.GhostSites.Commands.CreateGhostSite;
+namespace GhostMetrics.Core.Application.Features.Ghost.Sites.Commands.CreateGhostSite;
 
-public class CreateGhostSiteCommandValidator : AbstractValidator<CreateGhostSiteCommand>
+public class CreateSiteCommandValidator : AbstractValidator<CreateGhostSiteCommand>
 {
     private readonly IApplicationDbContext _context;
     
-    public CreateGhostSiteCommandValidator(IApplicationDbContext context)
+    public CreateSiteCommandValidator(IApplicationDbContext context)
     {
         _context = context;
         

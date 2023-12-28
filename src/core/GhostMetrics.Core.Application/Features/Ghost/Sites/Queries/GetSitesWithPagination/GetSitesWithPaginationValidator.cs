@@ -1,8 +1,8 @@
-namespace GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSitesWithPagination;
+namespace GhostMetrics.Core.Application.Features.Ghost.Sites.Queries.GetSitesWithPagination;
 
-public class GetGhostSitesWithPaginationValidator : AbstractValidator<GetGhostSitesWithPaginationQuery>
+public class GetSitesWithPaginationValidator : AbstractValidator<GetGhostSitesWithPaginationQuery>
 {
-    public GetGhostSitesWithPaginationValidator()
+    public GetSitesWithPaginationValidator()
     {
         RuleFor(x => x.ListId)
             .NotEmpty().WithMessage("List ID is required.");

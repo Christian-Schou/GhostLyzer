@@ -1,7 +1,7 @@
 using GhostMetrics.Core.Application.Common.Models;
-using GhostMetrics.Core.Application.Features.GhostSites.Commands.CreateGhostSite;
-using GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSite;
-using GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSitesWithPagination;
+using GhostMetrics.Core.Application.Features.Ghost.Sites.Commands.CreateGhostSite;
+using GhostMetrics.Core.Application.Features.Ghost.Sites.Queries.GetSite;
+using GhostMetrics.Core.Application.Features.Ghost.Sites.Queries.GetSitesWithPagination;
 
 namespace GhostMetrics.Web.Endpoints;
 
@@ -16,12 +16,12 @@ public class Sites : EndpointGroupBase
             .MapPost(CreateGhostSite);
     }
 
-    public async Task<GhostSiteDto> GetGhostSite(ISender sender, Guid id)
+    public async Task<SiteDto> GetGhostSite(ISender sender, Guid id)
     {
         return await sender.Send(new GetGhostSiteQuery(id));
     }
 
-    public async Task<PaginatedList<GhsotSiteBriefDto>> GetGhostSites(ISender sender, [AsParameters] GetGhostSitesWithPaginationQuery query)
+    public async Task<PaginatedList<BriefSiteDto>> GetGhostSites(ISender sender, [AsParameters] GetGhostSitesWithPaginationQuery query)
     {
         return await sender.Send(query);
     }

@@ -1,13 +1,13 @@
 using GhostMetrics.Core.Domain.Events;
 using Microsoft.Extensions.Logging;
 
-namespace GhostMetrics.Core.Application.Features.GhostSites.EventHandlers;
+namespace GhostMetrics.Core.Application.Features.Ghost.Sites.EventHandlers;
 
-public class GhostSiteCreatedEventHandler : INotificationHandler<GhostSiteCreatedEvent>
+public class SiteCreatedEventHandler : INotificationHandler<GhostSiteCreatedEvent>
 {
-    private readonly ILogger<GhostSiteCreatedEventHandler> _logger;
+    private readonly ILogger<SiteCreatedEventHandler> _logger;
 
-    public GhostSiteCreatedEventHandler(ILogger<GhostSiteCreatedEventHandler> logger)
+    public SiteCreatedEventHandler(ILogger<SiteCreatedEventHandler> logger)
     {
         _logger = logger;
     }

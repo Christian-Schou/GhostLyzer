@@ -2,7 +2,7 @@ using GhostMetrics.Core.Application.Common.Interfaces;
 using GhostMetrics.Core.Domain.Entities.Ghost;
 using GhostMetrics.Core.Domain.Events;
 
-namespace GhostMetrics.Core.Application.Features.GhostSites.Commands.CreateGhostSite;
+namespace GhostMetrics.Core.Application.Features.Ghost.Sites.Commands.CreateGhostSite;
 
 public record CreateGhostSiteCommand : IRequest<Guid>
 {
