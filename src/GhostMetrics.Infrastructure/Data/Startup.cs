@@ -1,5 +1,7 @@
+using GhostMetrics.Core.Application.Common.Data;
 using GhostMetrics.Core.Application.Common.Interfaces;
 using GhostMetrics.Infrastructure.Data.Interceptors;
+using GhostMetrics.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +13,8 @@ public static class Startup
 {
     public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddRepositories();
+        
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         Guard.Against.Null(connectionString,
             message: "Connection string 'DefaultConnection' was not found in the configuration.");
@@ -27,6 +31,8 @@ public static class Startup
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<ApplicationDbContextInitializer>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

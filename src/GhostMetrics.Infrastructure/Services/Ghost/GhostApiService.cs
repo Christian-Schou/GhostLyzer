@@ -1,4 +1,3 @@
-using GhostMetrics.Core.Application.Common.Interfaces;
 using GhostMetrics.Core.Application.Services.Ghost;
 using Microsoft.Extensions.Logging;
 

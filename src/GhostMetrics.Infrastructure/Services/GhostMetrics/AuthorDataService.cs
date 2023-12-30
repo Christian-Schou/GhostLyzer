@@ -1,6 +1,5 @@
 using GhostMetrics.Core.Domain.Entities.Ghost;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace GhostMetrics.Infrastructure.Services.GhostMetrics;
 
@@ -31,12 +30,12 @@ public partial class GhostMetricsDataService
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "An unhandled error occured while trying to add or update all authors from Ghost site to GhostMetrics database");
+            _logger.LogError(exception, "GhostMetrics: An unhandled error occured while trying to add or update all authors from Ghost site to GhostMetrics database");
             throw;
         }
     }
 
-    public async Task AddOrUpdateSingleGhostAuthorInDatabaseAsync(
+    public async Task<Guid> AddOrUpdateSingleGhostAuthorInDatabaseAsync(
         GhostSharp.Entities.Author ghostAuthor, CancellationToken cancellationToken = default)
     {
         try
@@ -53,8 +52,9 @@ public partial class GhostMetricsDataService
                 existingAuthor.Bio = ghostAuthor.Bio;
                 existingAuthor.Url = ghostAuthor.Url;
 
-                _context.Authors.Update(existingAuthor);
-                await _context.SaveChangesAsync(cancellationToken);
+                _unitOfWork.Authors.Update(existingAuthor);
+                await _unitOfWork.CompleteAsync(cancellationToken);
+                return existingAuthor.Id;
             }
             else
             {
@@ -69,8 +69,9 @@ public partial class GhostMetricsDataService
                     Url = ghostAuthor.Url
                 };
 
-                _context.Authors.Add(newAuthor);
-                await _context.SaveChangesAsync(cancellationToken);
+                _unitOfWork.Authors.Insert(newAuthor);
+                await _unitOfWork.CompleteAsync(cancellationToken);
+                return newAuthor.Id;
             }
         }
         catch (Exception exception)

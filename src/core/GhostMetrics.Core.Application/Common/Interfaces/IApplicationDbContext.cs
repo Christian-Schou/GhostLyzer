@@ -15,4 +15,5 @@ public interface IApplicationDbContext
     DbSet<PostAuthor> PostAuthors { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    DbSet<T> Set<T>() where T : class;
 }
