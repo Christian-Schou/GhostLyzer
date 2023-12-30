@@ -20,7 +20,9 @@ public class SiteCreatedEventHandler : INotificationHandler<GhostSiteCreatedEven
         _logger.LogInformation("GhostMetrics Domain Event: {DomainEvent}", notification.GetType().Name);
 
         // Import Ghost objects from Ghost Site API
+        _logger.LogInformation("GhostMetrics: Importing Ghost CMS Authors to GhostMetrics database");
         await _ghostMetrics.ImportAndUpdateAuthorsForSiteAsync(notification.Site.Id, cancellationToken);
+        _logger.LogInformation("GhostMetrics: Importing all Ghost CMS Posts into GhostMetrics database");
         await _ghostMetrics.ImportAndUpdatePostsForSiteAsync(notification.Site.Id, cancellationToken);
     }
 }

@@ -14,6 +14,7 @@ public static class Startup
     public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRepositories();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         Guard.Against.Null(connectionString,
@@ -32,7 +33,7 @@ public static class Startup
 
         services.AddScoped<ApplicationDbContextInitializer>();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
 
         return services;
     }

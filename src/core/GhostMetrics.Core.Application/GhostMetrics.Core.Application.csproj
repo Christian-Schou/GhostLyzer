@@ -12,5 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\Ghost\" />
+    <Folder Include="Features\Ghost\Sites\Commands\UpdateSiteAuthors\" />
+    <Folder Include="Features\Ghost\Sites\Commands\UpdateSitePosts\" />
+    <Folder Include="Features\Ghost\Sites\Commands\UpdateSiteTags\" />
   </ItemGroup>
 </Project>

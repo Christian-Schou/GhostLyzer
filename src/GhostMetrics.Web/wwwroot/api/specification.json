@@ -629,6 +629,32 @@
           }
         ]
       }
+    },
+    "/api/Webhooks/update-author": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "operationId": "UpdateAuthor",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Webhooks/update-post": {
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "operationId": "UpdatePost",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
