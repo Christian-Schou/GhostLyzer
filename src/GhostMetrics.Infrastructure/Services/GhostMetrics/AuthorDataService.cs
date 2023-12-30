@@ -1,6 +1,3 @@
-using GhostMetrics.Core.Domain.Entities.Ghost;
-using Microsoft.EntityFrameworkCore;
-
 namespace GhostMetrics.Infrastructure.Services.GhostMetrics;
 
 public partial class GhostMetricsDataService
@@ -9,13 +6,8 @@ public partial class GhostMetricsDataService
     {
         try
         {
-            // Retrieve site details
-            var site = await _context.Sites
-                .AsNoTracking()
-                .Include(x => x.IntegrationDetails)
-                .FirstAsync(x => x.Id == siteId, cancellationToken);
-
-            // Make sure we have the required integration details
+            // Get the site and make sure we have the required integration details
+            var site = await _unitOfWork.Sites.GetSiteWithIntegrationDetailsAsync(siteId, cancellationToken);
             Guard.Against.NullOrEmpty(site.IntegrationDetails.ApiUrl);
             Guard.Against.NullOrEmpty(site.IntegrationDetails.ContentApiKey);
             
@@ -25,7 +17,7 @@ public partial class GhostMetricsDataService
 
             foreach (var author in authors)
             {
-                await AddOrUpdateSingleGhostAuthorInDatabaseAsync(author, cancellationToken);
+                await _unitOfWork.Authors.AddOrUpdateAuthorAsync(author, cancellationToken);
             }
         }
         catch (Exception exception)
@@ -35,49 +27,4 @@ public partial class GhostMetricsDataService
         }
     }
 
-    public async Task<Guid> AddOrUpdateSingleGhostAuthorInDatabaseAsync(
-        GhostSharp.Entities.Author ghostAuthor, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            // Retrieve the existing author from the database
-            var existingAuthor = _context.Authors.FirstOrDefault(a => a.GhostAuthorId == ghostAuthor.Id);
-
-            if (existingAuthor != null)
-            {
-                // Update the existing author if it already exists
-                existingAuthor.Name = ghostAuthor.Name;
-                existingAuthor.Slug = ghostAuthor.Slug;
-                existingAuthor.ProfileImage = ghostAuthor.ProfileImage;
-                existingAuthor.Bio = ghostAuthor.Bio;
-                existingAuthor.Url = ghostAuthor.Url;
-
-                _unitOfWork.Authors.Update(existingAuthor);
-                await _unitOfWork.CompleteAsync(cancellationToken);
-                return existingAuthor.Id;
-            }
-            else
-            {
-                // Create a new author if it doesn't exist
-                var newAuthor = new Author
-                {
-                    GhostAuthorId = ghostAuthor.Id,
-                    Name = ghostAuthor.Name,
-                    Slug = ghostAuthor.Slug,
-                    ProfileImage = ghostAuthor.ProfileImage,
-                    Bio = ghostAuthor.Bio,
-                    Url = ghostAuthor.Url
-                };
-
-                _unitOfWork.Authors.Insert(newAuthor);
-                await _unitOfWork.CompleteAsync(cancellationToken);
-                return newAuthor.Id;
-            }
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, "GhostMetrics: An unhandled error occured while trying to add or update Ghost author in GhostMetrics database");
-            throw;
-        }
-    }
 }

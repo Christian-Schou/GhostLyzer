@@ -1,7 +1,6 @@
 using GhostMetrics.Core.Application.Common.Data;
 using GhostMetrics.Core.Application.Common.Interfaces;
 using GhostMetrics.Core.Application.Data.Repositories;
-using GhostMetrics.Infrastructure.Data.Repositories;
 
 namespace GhostMetrics.Infrastructure.Data;
 
@@ -13,12 +12,16 @@ public class UnitOfWork : IUnitOfWork
     public IPostRepository Posts { get; private set; }
     public ISiteRepository Sites { get; private set; }
 
-    public UnitOfWork(IApplicationDbContext context)
+    public UnitOfWork(
+        IApplicationDbContext context,
+        IAuthorRepository authors,
+        IPostRepository posts,
+        ISiteRepository sites)
     {
         _context = context;
-        Authors = new AuthorRepository(_context);
-        Posts = new PostRepository(_context);
-        Sites = new SiteRepository(_context);
+        Authors = authors;
+        Posts = posts;
+        Sites = sites;
     }
 
     public async Task<int> CompleteAsync(CancellationToken cancellationToken)

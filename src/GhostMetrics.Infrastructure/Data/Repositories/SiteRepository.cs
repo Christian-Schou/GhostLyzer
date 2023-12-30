@@ -7,12 +7,23 @@ namespace GhostMetrics.Infrastructure.Data.Repositories;
 
 public class SiteRepository : Repository<Site>, ISiteRepository
 {
-    private readonly IApplicationDbContext _context;
-    private DbSet<Site> _entities;
-
-    public SiteRepository(IApplicationDbContext context)  : base(context)
+    private readonly ILogger<SiteRepository> _logger;
+    public SiteRepository(IApplicationDbContext context,
+        ILogger<SiteRepository> logger)  : base(context)
     {
-        _context = context;
-        _entities = context.Sites;
+        _logger = logger;
+    }
+
+    public async Task<Site> GetSiteWithIntegrationDetailsAsync(Guid siteId, CancellationToken cancellationToken)
+    {
+        // Retrieve site details
+        var site = await Context.Sites
+            .AsNoTracking()
+            .Include(x => x.IntegrationDetails)
+            .FirstAsync(x => x.Id == siteId, cancellationToken);
+
+        Guard.Against.Null(site);
+
+        return site;
     }
 }
