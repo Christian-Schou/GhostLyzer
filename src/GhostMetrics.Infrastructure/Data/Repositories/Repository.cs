@@ -6,46 +6,52 @@ namespace GhostMetrics.Infrastructure.Data.Repositories;
 
 public class Repository<T> : IRepository<T> where T : class
 {
-    private readonly IApplicationDbContext _context;
-    private DbSet<T> _entities;
+    protected readonly IApplicationDbContext Context;
+    private readonly DbSet<T> _entities;
 
-    public Repository(IApplicationDbContext context)
+    protected Repository(IApplicationDbContext context)
     {
-        this._context = context;
+        Context = context;
         _entities = context.Set<T>();
     }
 
-    public IEnumerable<T> GetAll()
+    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return _entities.ToList();
+        return await _entities.AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public T GetById(object id)
+    public async Task<T> GetByIdAsync(object id, CancellationToken cancellationToken)
     {
-        var entity = _entities.Find(id);
+        var entity = await _entities.FindAsync(id, cancellationToken);
         Guard.Against.Null(entity, nameof(entity));
+
+        // Detach the entity from the change tracker
+        _entities.Entry(entity).State = EntityState.Detached;
         return entity;
     }
 
-    public void Insert(T obj)
+    public async Task AddAsync(T obj, CancellationToken cancellationToken)
     {
-        _entities.Add(obj);
+        await _entities.AddAsync(obj, cancellationToken);
+        await SaveAsync(cancellationToken);
     }
 
-    public void Update(T obj)
+    public async Task UpdateAsync(T obj, CancellationToken cancellationToken)
     {
         _entities.Update(obj);
+        await SaveAsync(cancellationToken);
     }
 
-    public void Delete(object id)
+    public async Task DeleteAsync(object id, CancellationToken cancellationToken)
     {
-        var existing = _entities.Find(id);
+        var existing = await _entities.FindAsync(id);
         Guard.Against.Null(existing, nameof(existing));
         _entities.Remove(existing);
+        await SaveAsync(cancellationToken);
     }
 
     public async Task SaveAsync(CancellationToken cancellationToken)
     {
-        await _context.SaveChangesAsync(cancellationToken);
+        await Context.SaveChangesAsync(cancellationToken);
     }
 }
