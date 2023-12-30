@@ -1,5 +1,6 @@
 using GhostMetrics.Core.Application.Common.Interfaces;
 using GhostMetrics.Infrastructure.Data;
+using GhostMetrics.Web.Infrastructure.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -21,7 +22,7 @@ public static class Startup
             .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
-
+        
         services.AddScoped(provider =>
         {
             var validationRules = provider.GetService<IEnumerable<FluentValidationRule>>();

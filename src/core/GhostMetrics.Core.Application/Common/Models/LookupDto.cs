@@ -1,4 +1,4 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Application.Common.Models;
 
@@ -11,9 +11,9 @@ public class LookupDto
     {
         public Mapping()
         {
-            CreateMap<GhostSiteList, LookupDto>();
-            CreateMap<GhostSite, LookupDto>();
-            CreateMap<GhostSiteIntegrationDetail, LookupDto>();
+            CreateMap<SiteList, LookupDto>();
+            CreateMap<Site, LookupDto>();
+            CreateMap<IntegrationDetail, LookupDto>();
         }
     }
 }

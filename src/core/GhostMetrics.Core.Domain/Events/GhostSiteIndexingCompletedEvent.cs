@@ -1,13 +1,13 @@
-using GhostMetrics.Core.Domain.Entities.GhostSites;
+using GhostMetrics.Core.Domain.Entities.Ghost;
 
 namespace GhostMetrics.Core.Domain.Events;
 
 public class GhostSiteIndexingCompletedEvent : BaseEvent
 {
-    public GhostSiteIndexingCompletedEvent(GhostSite ghostSite)
+    public GhostSiteIndexingCompletedEvent(Site site)
     {
-        Site = ghostSite;
+        Site = site;
     }
     
-    public GhostSite Site { get; }
+    public Site Site { get; }
 }

@@ -13,7 +13,7 @@ public static class Startup
     {
         services.AddDatabaseServices(configuration);
         services.AddIdentityServices();
-        services.AddHttpClient();
+        //services.AddHttpClient();
         services.AddInfrastructureServices();
         return services;
     }

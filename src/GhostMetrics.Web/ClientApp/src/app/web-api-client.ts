@@ -15,83 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export interface IGhostApiClient {
-    getGhostPosts(siteId: string): Observable<GhostApiPost[]>;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class GhostApiClient implements IGhostApiClient {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ?? "";
-    }
-
-    getGhostPosts(siteId: string): Observable<GhostApiPost[]> {
-        let url_ = this.baseUrl + "/api/GhostApi/{siteId}";
-        if (siteId === undefined || siteId === null)
-            throw new Error("The parameter 'siteId' must be defined.");
-        url_ = url_.replace("{siteId}", encodeURIComponent("" + siteId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetGhostPosts(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetGhostPosts(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<GhostApiPost[]>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<GhostApiPost[]>;
-        }));
-    }
-
-    protected processGetGhostPosts(response: HttpResponseBase): Observable<GhostApiPost[]> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(GhostApiPost.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-}
-
-export interface IGhostSiteListsClient {
+export interface ISiteListsClient {
     getGhostSiteLists(): Observable<GhostSitesVm>;
     createGhostSiteList(command: CreateGhostSiteListCommand): Observable<string>;
     updateGhostSiteList(id: string, command: UpdateGhostSiteListCommand): Observable<void>;
@@ -102,7 +26,7 @@ export interface IGhostSiteListsClient {
 @Injectable({
     providedIn: 'root'
 })
-export class GhostSiteListsClient implements IGhostSiteListsClient {
+export class SiteListsClient implements ISiteListsClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -113,7 +37,7 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
     }
 
     getGhostSiteLists(): Observable<GhostSitesVm> {
-        let url_ = this.baseUrl + "/api/GhostSiteLists";
+        let url_ = this.baseUrl + "/api/SiteLists";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -161,7 +85,7 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
     }
 
     createGhostSiteList(command: CreateGhostSiteListCommand): Observable<string> {
-        let url_ = this.baseUrl + "/api/GhostSiteLists";
+        let url_ = this.baseUrl + "/api/SiteLists";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -214,7 +138,7 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
     }
 
     updateGhostSiteList(id: string, command: UpdateGhostSiteListCommand): Observable<void> {
-        let url_ = this.baseUrl + "/api/GhostSiteLists/{id}";
+        let url_ = this.baseUrl + "/api/SiteLists/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -265,7 +189,7 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
     }
 
     deleteGhostSiteList(id: string): Observable<void> {
-        let url_ = this.baseUrl + "/api/GhostSiteLists/{id}";
+        let url_ = this.baseUrl + "/api/SiteLists/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -312,7 +236,7 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
     }
 
     purgeGhostSiteLists(): Observable<void> {
-        let url_ = this.baseUrl + "/api/GhostSiteLists/all";
+        let url_ = this.baseUrl + "/api/SiteLists/all";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -356,16 +280,16 @@ export class GhostSiteListsClient implements IGhostSiteListsClient {
     }
 }
 
-export interface IGhostSitesClient {
-    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfGhsotSiteBriefDto>;
+export interface ISitesClient {
+    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfBriefSiteDto>;
     createGhostSite(command: CreateGhostSiteCommand): Observable<string>;
-    getGhostSite(id: string): Observable<GhostSiteDto2>;
+    getGhostSite(id: string): Observable<SiteDto>;
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class GhostSitesClient implements IGhostSitesClient {
+export class SitesClient implements ISitesClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -375,8 +299,8 @@ export class GhostSitesClient implements IGhostSitesClient {
         this.baseUrl = baseUrl ?? "";
     }
 
-    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfGhsotSiteBriefDto> {
-        let url_ = this.baseUrl + "/api/GhostSites?";
+    getGhostSites(listId: string, pageNumber: number, pageSize: number): Observable<PaginatedListOfBriefSiteDto> {
+        let url_ = this.baseUrl + "/api/Sites?";
         if (listId === undefined || listId === null)
             throw new Error("The parameter 'listId' must be defined and cannot be null.");
         else
@@ -406,14 +330,14 @@ export class GhostSitesClient implements IGhostSitesClient {
                 try {
                     return this.processGetGhostSites(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<PaginatedListOfGhsotSiteBriefDto>;
+                    return _observableThrow(e) as any as Observable<PaginatedListOfBriefSiteDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<PaginatedListOfGhsotSiteBriefDto>;
+                return _observableThrow(response_) as any as Observable<PaginatedListOfBriefSiteDto>;
         }));
     }
 
-    protected processGetGhostSites(response: HttpResponseBase): Observable<PaginatedListOfGhsotSiteBriefDto> {
+    protected processGetGhostSites(response: HttpResponseBase): Observable<PaginatedListOfBriefSiteDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -424,7 +348,7 @@ export class GhostSitesClient implements IGhostSitesClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = PaginatedListOfGhsotSiteBriefDto.fromJS(resultData200);
+            result200 = PaginatedListOfBriefSiteDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -436,7 +360,7 @@ export class GhostSitesClient implements IGhostSitesClient {
     }
 
     createGhostSite(command: CreateGhostSiteCommand): Observable<string> {
-        let url_ = this.baseUrl + "/api/GhostSites";
+        let url_ = this.baseUrl + "/api/Sites";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -488,8 +412,8 @@ export class GhostSitesClient implements IGhostSitesClient {
         return _observableOf(null as any);
     }
 
-    getGhostSite(id: string): Observable<GhostSiteDto2> {
-        let url_ = this.baseUrl + "/api/GhostSites/{id}";
+    getGhostSite(id: string): Observable<SiteDto> {
+        let url_ = this.baseUrl + "/api/Sites/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -510,14 +434,14 @@ export class GhostSitesClient implements IGhostSitesClient {
                 try {
                     return this.processGetGhostSite(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GhostSiteDto2>;
+                    return _observableThrow(e) as any as Observable<SiteDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GhostSiteDto2>;
+                return _observableThrow(response_) as any as Observable<SiteDto>;
         }));
     }
 
-    protected processGetGhostSite(response: HttpResponseBase): Observable<GhostSiteDto2> {
+    protected processGetGhostSite(response: HttpResponseBase): Observable<SiteDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -528,7 +452,7 @@ export class GhostSitesClient implements IGhostSitesClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GhostSiteDto2.fromJS(resultData200);
+            result200 = SiteDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1123,124 +1047,111 @@ export class UsersClient implements IUsersClient {
     }
 }
 
-export class GhostApiPost implements IGhostApiPost {
-    slug?: string | undefined;
-    id?: string | undefined;
-    uuid?: string | undefined;
-    title?: string | undefined;
-    feature_image?: string | undefined;
-    featured?: boolean;
-    visibility?: string | undefined;
-    created_at?: Date;
-    updated_at?: Date;
-    published_at?: Date;
-    custom_excerpt?: string | undefined;
-    canonical_url?: string | undefined;
-    url?: string | undefined;
-    excerpt?: string | undefined;
-    reading_time?: number;
-    access?: boolean;
-    og_title?: string | undefined;
-    og_description?: string | undefined;
-    twitter_title?: string | undefined;
-    twitter_description?: string | undefined;
-    meta_title?: string | undefined;
-    meta_description?: string | undefined;
-
-    constructor(data?: IGhostApiPost) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.slug = _data["slug"];
-            this.id = _data["id"];
-            this.uuid = _data["uuid"];
-            this.title = _data["title"];
-            this.feature_image = _data["feature_image"];
-            this.featured = _data["featured"];
-            this.visibility = _data["visibility"];
-            this.created_at = _data["created_at"] ? new Date(_data["created_at"].toString()) : <any>undefined;
-            this.updated_at = _data["updated_at"] ? new Date(_data["updated_at"].toString()) : <any>undefined;
-            this.published_at = _data["published_at"] ? new Date(_data["published_at"].toString()) : <any>undefined;
-            this.custom_excerpt = _data["custom_excerpt"];
-            this.canonical_url = _data["canonical_url"];
-            this.url = _data["url"];
-            this.excerpt = _data["excerpt"];
-            this.reading_time = _data["reading_time"];
-            this.access = _data["access"];
-            this.og_title = _data["og_title"];
-            this.og_description = _data["og_description"];
-            this.twitter_title = _data["twitter_title"];
-            this.twitter_description = _data["twitter_description"];
-            this.meta_title = _data["meta_title"];
-            this.meta_description = _data["meta_description"];
-        }
-    }
-
-    static fromJS(data: any): GhostApiPost {
-        data = typeof data === 'object' ? data : {};
-        let result = new GhostApiPost();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["slug"] = this.slug;
-        data["id"] = this.id;
-        data["uuid"] = this.uuid;
-        data["title"] = this.title;
-        data["feature_image"] = this.feature_image;
-        data["featured"] = this.featured;
-        data["visibility"] = this.visibility;
-        data["created_at"] = this.created_at ? this.created_at.toISOString() : <any>undefined;
-        data["updated_at"] = this.updated_at ? this.updated_at.toISOString() : <any>undefined;
-        data["published_at"] = this.published_at ? this.published_at.toISOString() : <any>undefined;
-        data["custom_excerpt"] = this.custom_excerpt;
-        data["canonical_url"] = this.canonical_url;
-        data["url"] = this.url;
-        data["excerpt"] = this.excerpt;
-        data["reading_time"] = this.reading_time;
-        data["access"] = this.access;
-        data["og_title"] = this.og_title;
-        data["og_description"] = this.og_description;
-        data["twitter_title"] = this.twitter_title;
-        data["twitter_description"] = this.twitter_description;
-        data["meta_title"] = this.meta_title;
-        data["meta_description"] = this.meta_description;
-        return data;
-    }
+export interface IWebhooksClient {
+    updateAuthor(): Observable<void>;
+    updatePost(): Observable<void>;
 }
 
-export interface IGhostApiPost {
-    slug?: string | undefined;
-    id?: string | undefined;
-    uuid?: string | undefined;
-    title?: string | undefined;
-    feature_image?: string | undefined;
-    featured?: boolean;
-    visibility?: string | undefined;
-    created_at?: Date;
-    updated_at?: Date;
-    published_at?: Date;
-    custom_excerpt?: string | undefined;
-    canonical_url?: string | undefined;
-    url?: string | undefined;
-    excerpt?: string | undefined;
-    reading_time?: number;
-    access?: boolean;
-    og_title?: string | undefined;
-    og_description?: string | undefined;
-    twitter_title?: string | undefined;
-    twitter_description?: string | undefined;
-    meta_title?: string | undefined;
-    meta_description?: string | undefined;
+@Injectable({
+    providedIn: 'root'
+})
+export class WebhooksClient implements IWebhooksClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    updateAuthor(): Observable<void> {
+        let url_ = this.baseUrl + "/api/Webhooks/update-author";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAuthor(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAuthor(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdateAuthor(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    updatePost(): Observable<void> {
+        let url_ = this.baseUrl + "/api/Webhooks/update-post";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePost(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdatePost(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdatePost(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export class GhostSitesVm implements IGhostSitesVm {
@@ -1576,15 +1487,15 @@ export interface IColor extends IValueObject {
     supportedColours?: Color[];
 }
 
-export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSiteBriefDto {
-    items?: GhsotSiteBriefDto[];
+export class PaginatedListOfBriefSiteDto implements IPaginatedListOfBriefSiteDto {
+    items?: BriefSiteDto[];
     pageNumber?: number;
     totalPages?: number;
     totalCount?: number;
     hasPreviousPage?: boolean;
     hasNextPage?: boolean;
 
-    constructor(data?: IPaginatedListOfGhsotSiteBriefDto) {
+    constructor(data?: IPaginatedListOfBriefSiteDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1598,7 +1509,7 @@ export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSi
             if (Array.isArray(_data["Items"])) {
                 this.items = [] as any;
                 for (let item of _data["Items"])
-                    this.items!.push(GhsotSiteBriefDto.fromJS(item));
+                    this.items!.push(BriefSiteDto.fromJS(item));
             }
             this.pageNumber = _data["PageNumber"];
             this.totalPages = _data["TotalPages"];
@@ -1608,9 +1519,9 @@ export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSi
         }
     }
 
-    static fromJS(data: any): PaginatedListOfGhsotSiteBriefDto {
+    static fromJS(data: any): PaginatedListOfBriefSiteDto {
         data = typeof data === 'object' ? data : {};
-        let result = new PaginatedListOfGhsotSiteBriefDto();
+        let result = new PaginatedListOfBriefSiteDto();
         result.init(data);
         return result;
     }
@@ -1631,8 +1542,8 @@ export class PaginatedListOfGhsotSiteBriefDto implements IPaginatedListOfGhsotSi
     }
 }
 
-export interface IPaginatedListOfGhsotSiteBriefDto {
-    items?: GhsotSiteBriefDto[];
+export interface IPaginatedListOfBriefSiteDto {
+    items?: BriefSiteDto[];
     pageNumber?: number;
     totalPages?: number;
     totalCount?: number;
@@ -1640,13 +1551,13 @@ export interface IPaginatedListOfGhsotSiteBriefDto {
     hasNextPage?: boolean;
 }
 
-export class GhsotSiteBriefDto implements IGhsotSiteBriefDto {
+export class BriefSiteDto implements IBriefSiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
     indexed?: boolean;
 
-    constructor(data?: IGhsotSiteBriefDto) {
+    constructor(data?: IBriefSiteDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1664,9 +1575,9 @@ export class GhsotSiteBriefDto implements IGhsotSiteBriefDto {
         }
     }
 
-    static fromJS(data: any): GhsotSiteBriefDto {
+    static fromJS(data: any): BriefSiteDto {
         data = typeof data === 'object' ? data : {};
-        let result = new GhsotSiteBriefDto();
+        let result = new BriefSiteDto();
         result.init(data);
         return result;
     }
@@ -1681,14 +1592,14 @@ export class GhsotSiteBriefDto implements IGhsotSiteBriefDto {
     }
 }
 
-export interface IGhsotSiteBriefDto {
+export interface IBriefSiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
     indexed?: boolean;
 }
 
-export class GhostSiteDto2 implements IGhostSiteDto2 {
+export class SiteDto implements ISiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
@@ -1696,9 +1607,9 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
     paused?: boolean;
     lastIndexed?: Date;
     indexed?: boolean;
-    integrationDetail?: GhostSiteIntegrationDetailDto;
+    integrationDetails?: GhostSiteIntegrationDetailDto;
 
-    constructor(data?: IGhostSiteDto2) {
+    constructor(data?: ISiteDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1716,13 +1627,13 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
             this.paused = _data["Paused"];
             this.lastIndexed = _data["LastIndexed"] ? new Date(_data["LastIndexed"].toString()) : <any>undefined;
             this.indexed = _data["Indexed"];
-            this.integrationDetail = _data["IntegrationDetail"] ? GhostSiteIntegrationDetailDto.fromJS(_data["IntegrationDetail"]) : <any>undefined;
+            this.integrationDetails = _data["IntegrationDetails"] ? GhostSiteIntegrationDetailDto.fromJS(_data["IntegrationDetails"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): GhostSiteDto2 {
+    static fromJS(data: any): SiteDto {
         data = typeof data === 'object' ? data : {};
-        let result = new GhostSiteDto2();
+        let result = new SiteDto();
         result.init(data);
         return result;
     }
@@ -1736,12 +1647,12 @@ export class GhostSiteDto2 implements IGhostSiteDto2 {
         data["Paused"] = this.paused;
         data["LastIndexed"] = this.lastIndexed ? this.lastIndexed.toISOString() : <any>undefined;
         data["Indexed"] = this.indexed;
-        data["IntegrationDetail"] = this.integrationDetail ? this.integrationDetail.toJSON() : <any>undefined;
+        data["IntegrationDetails"] = this.integrationDetails ? this.integrationDetails.toJSON() : <any>undefined;
         return data;
     }
 }
 
-export interface IGhostSiteDto2 {
+export interface ISiteDto {
     id?: string;
     listId?: string;
     title?: string | undefined;
@@ -1749,7 +1660,7 @@ export interface IGhostSiteDto2 {
     paused?: boolean;
     lastIndexed?: Date;
     indexed?: boolean;
-    integrationDetail?: GhostSiteIntegrationDetailDto;
+    integrationDetails?: GhostSiteIntegrationDetailDto;
 }
 
 export class GhostSiteIntegrationDetailDto implements IGhostSiteIntegrationDetailDto {

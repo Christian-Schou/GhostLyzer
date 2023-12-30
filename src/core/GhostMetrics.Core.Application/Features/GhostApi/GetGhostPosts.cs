@@ -1,13 +1,12 @@
-using GhostMetrics.Core.Application.Common.Interfaces;
-using GhostMetrics.Core.Application.Features.GhostSites.Queries.GetGhostSite;
+using GhostMetrics.Core.Application.Features.Ghost.Sites.Queries.GetSite;
 using GhostMetrics.Core.Application.Services.Ghost;
-using GhostMetrics.Core.Domain.Models.GhostCms.Content;
+using GhostSharp.Entities;
 
 namespace GhostMetrics.Core.Application.Features.GhostApi;
 
-public record GetGhostPostsQuery(Guid SiteId) : IRequest<List<GhostApiPost>>;
+public record GetGhostPostsQuery(Guid SiteId) : IRequest<List<Post>>;
 
-public class GetGhostPostsQueryHandler : IRequestHandler<GetGhostPostsQuery, List<GhostApiPost>>
+public class GetGhostPostsQueryHandler : IRequestHandler<GetGhostPostsQuery, List<Post>>
 {
     private readonly IGhostApiService _ghostApi;
     private readonly ISender _sender;
@@ -18,12 +17,12 @@ public class GetGhostPostsQueryHandler : IRequestHandler<GetGhostPostsQuery, Lis
         _ghostApi = ghostApi;
     }
 
-    public async Task<List<GhostApiPost>> Handle(GetGhostPostsQuery request, CancellationToken cancellationToken)
+    public async Task<List<Post>> Handle(GetGhostPostsQuery request, CancellationToken cancellationToken)
     {
         var ghostSiteEntity = await _sender.Send(new GetGhostSiteQuery(request.SiteId), cancellationToken);
         
-        return await _ghostApi.GetAllGhostPostsAsync(
-            apiUrl: ghostSiteEntity.IntegrationDetail.ApiUrl!,
-            contentApiKey: ghostSiteEntity.IntegrationDetail.ContentApiKey!);
+        return _ghostApi.GetAllPosts(
+            apiUrl: ghostSiteEntity.IntegrationDetails.ApiUrl!,
+            contentApiKey: ghostSiteEntity.IntegrationDetails.ContentApiKey!);
     }
 }
