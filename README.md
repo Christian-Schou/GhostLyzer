@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://christian-schou.dk/ghostmetrics"><img src="https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.png" alt="GhostMetrics" width="200"></a>
+  <a href="https://christian-schou.dk/ghostmetrics"><img src="https://github.com/Christian-Schou/GhostMetrics/blob/main/assets/img/ghostmetrics-github-logo.png" alt="GhostMetrics" width="200"></a>
   <br>
   GhostMetrics
   <br>
