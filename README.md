@@ -6,11 +6,14 @@
   <br>
 </h1>
 
-<h4 align="center">A nice solution to help users of Ghost CMS succeed even more by using their data. Built on top of <a href="https://dotnet.microsoft.com/en-us/" target="_blank">.NET</a> and <a href="https://angular.io/">Angular</a>.</h4>
+<h4 align="center">A nice open-source solution to help users of the Ghost CMS succeed even more by enabling their data. Built on top of <a href="https://dotnet.microsoft.com/en-us/" target="_blank">.NET</a> and <a href="https://angular.io/">Angular</a>.</h4>
 
 <p align="center">
   <a href="https://github.com/Christian-Schou/GhostMetrics/actions/workflows/build.yml">
     <img src="https://github.com/Christian-Schou/GhostMetrics/actions/workflows/build.yml/badge.svg?branch=main" alt="GhostMetrics">
+  </a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg">
   </a>
 </p>
 
