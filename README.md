@@ -10,8 +10,9 @@
 
 <p align="center">
   <a href="https://github.com/Christian-Schou/GhostMetrics/actions/workflows/build.yml"><img src="https://github.com/Christian-Schou/GhostMetrics/actions/workflows/build.yml/badge.svg?branch=main" alt="GhostMetrics"></a>
-  <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
+  <a href="https://github.com/Christian-Schou/GhostMetrics/actions/workflows/codeql.yml"><img src="https://github.com/Christian-Schou/GhostMetrics/actions/workflows/codeql.yml/badge.svg?branch=main" alt="GhostMetrics"></a>
   <a href="https://www.codefactor.io/repository/github/christian-schou/ghostmetrics"><img src="https://www.codefactor.io/repository/github/christian-schou/ghostmetrics/badge" alt="CodeFactor" /></a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
 </p>
 
 <p align="center">
