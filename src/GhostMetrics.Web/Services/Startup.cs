@@ -14,7 +14,7 @@ public static class Startup
     {
         services.AddDatabaseDeveloperPageExceptionFilter();
         
-        services.AddScoped<IUser, CurrentUser>();
+        services.AddScoped<IUserService, CurrentUserService>();
 
         services.AddHttpContextAccessor();
 

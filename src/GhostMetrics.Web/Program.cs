@@ -5,8 +5,9 @@ using GhostMetrics.Web.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices();
-builder.Services.AddWebServices();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddWebServices();
+
 
 var app = builder.Build();
 

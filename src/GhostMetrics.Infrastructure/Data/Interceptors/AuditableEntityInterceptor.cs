@@ -8,12 +8,12 @@ namespace GhostMetrics.Infrastructure.Data.Interceptors;
 
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {
-    private readonly IUser _user;
+    private readonly IUserService _userService;
     private readonly TimeProvider _dateTime;
 
-    public AuditableEntityInterceptor(IUser user, TimeProvider dateTime)
+    public AuditableEntityInterceptor(IUserService userService, TimeProvider dateTime)
     {
-        _user = user;
+        _userService = userService;
         _dateTime = dateTime;
     }
 
@@ -39,13 +39,13 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = _user.Id;
+                entry.Entity.CreatedBy = _userService.Id;
                 entry.Entity.Created = _dateTime.GetUtcNow();
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = _user.Id;
+                entry.Entity.LastModifiedBy = _userService.Id;
                 entry.Entity.LastModified = _dateTime.GetUtcNow();
             }
         }

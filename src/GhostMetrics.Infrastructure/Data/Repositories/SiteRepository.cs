@@ -22,8 +22,34 @@ public class SiteRepository : Repository<Site>, ISiteRepository
             .Include(x => x.IntegrationDetails)
             .FirstAsync(x => x.Id == siteId, cancellationToken);
 
+        Guard.Against.Null(site.IntegrationDetails);
         Guard.Against.Null(site);
 
         return site;
+    }
+
+    public async Task<string> GetSiteWebhookSecretAsync(Guid siteId, CancellationToken cancellationToken)
+    {
+        var site = await GetSiteWithIntegrationDetailsAsync(siteId, cancellationToken);
+
+        Guard.Against.Null(site.IntegrationDetails);
+        Guard.Against.NullOrEmpty(site.IntegrationDetails.WebhookSecret);
+        
+        return site.IntegrationDetails.WebhookSecret;
+    }
+
+    public async Task<string> RefreshWebhookAsync(Guid siteId, CancellationToken cancellationToken)
+    {
+        // Get the specific site with the integration details
+        var site = await GetSiteWithIntegrationDetailsAsync(siteId, cancellationToken);
+        Guard.Against.Null(site.IntegrationDetails);
+        
+        // Let's update the webhook secret
+        site.IntegrationDetails.UpdateWebhookSecret();
+        await Context.SaveChangesAsync(cancellationToken);
+
+        // make sure the webhook secret is present and return it
+        Guard.Against.NullOrEmpty(site.IntegrationDetails.WebhookSecret);
+        return site.IntegrationDetails.WebhookSecret;
     }
 }

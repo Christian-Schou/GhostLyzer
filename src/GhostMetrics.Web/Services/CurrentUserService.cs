@@ -3,11 +3,11 @@ using GhostMetrics.Core.Application.Common.Interfaces;
 
 namespace GhostMetrics.Web.Services;
 
-public class CurrentUser : IUser
+public class CurrentUserService : IUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CurrentUser(IHttpContextAccessor httpContextAccessor)
+    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }

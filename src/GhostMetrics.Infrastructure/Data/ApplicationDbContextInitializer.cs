@@ -106,15 +106,14 @@ public class ApplicationDbContextInitializer
                 {
                     new Site
                     {
-                        Title = "Default Ghost Site",
+                        Title = "GhostMetrics Ghost Site",
                         Indexed = false,
                         Paused = true,
-                        IntegrationDetails = new IntegrationDetail
-                        {
-                            ApiUrl = "https://your-ghost-site.ghostmetrics",
-                            AdminApiKey = "your-admin-api-key-here",
-                            ContentApiKey = "your-content-api-key-here"
-                        }
+                        Note = "This is the default GhostMetrics created site. Please add your own Ghost sites.",
+                        IntegrationDetails = new IntegrationDetail(
+                            apiUrl: "https://your-ghost-site.ghostmetrics",
+                            contentApiKey: "your-content-api-key-here",
+                            adminApiKey: "your-admin-api-key-here")
                     }
                 }
             });

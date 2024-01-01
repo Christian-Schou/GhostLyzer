@@ -8,6 +8,7 @@ public partial class GhostMetricsDataService
         {
             // Get the site and make sure we have the required integration details
             var site = await _unitOfWork.Sites.GetSiteWithIntegrationDetailsAsync(siteId, cancellationToken);
+            Guard.Against.Null(site.IntegrationDetails);
             Guard.Against.NullOrEmpty(site.IntegrationDetails.ApiUrl);
             Guard.Against.NullOrEmpty(site.IntegrationDetails.ContentApiKey);
             

@@ -649,6 +649,17 @@
           "Webhooks"
         ],
         "operationId": "UpdatePost",
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -936,16 +947,13 @@
             "nullable": true
           },
           "ApiUrl": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "ContentApiKey": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "AdminApiKey": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         }
       },

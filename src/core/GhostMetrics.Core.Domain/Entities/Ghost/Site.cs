@@ -52,12 +52,12 @@ public class Site : BaseAuditableEntity
     /// Integration details for Ghost Metrics
     /// to communicate with the Ghost Admin/Content API.
     /// </summary>
-    public IntegrationDetail IntegrationDetails { get; set; } = new();
+    public IntegrationDetail? IntegrationDetails { get; set; }
     
     /// <summary>
     /// Posts that are related to this Ghost site.
     /// </summary>
-    public List<Post> Posts { get; set; } = new();
+    public List<Post>? Posts { get; set; }
     
     /// <summary>
     /// What list the Ghost Site belongs to in Ghost Metrics
