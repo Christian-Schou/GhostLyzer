@@ -10,8 +10,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     private readonly ILogger<TRequest> _logger;
     private readonly IUserService _userService;
     private readonly IIdentityService _identityService;
-
-
+    
     public PerformanceBehaviour(
         ILogger<TRequest> logger,
         IUserService userService,

@@ -8,5 +8,4 @@ public interface ISiteRepository : IRepository<Site>
     public Task<Site> GetSiteWithIntegrationDetailsAsync(Guid siteId, CancellationToken cancellationToken);
 
     public Task<string> GetSiteWebhookSecretAsync(Guid siteId, CancellationToken cancellationToken);
-    
 }

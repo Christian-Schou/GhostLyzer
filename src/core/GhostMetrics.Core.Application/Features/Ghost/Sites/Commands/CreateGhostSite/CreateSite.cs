@@ -12,7 +12,6 @@ public record CreateGhostSiteCommand : IRequest<Guid>
     public string ApiUrl { get; init; } = string.Empty;
     public string ContentApiKey { get; init; } = string.Empty;
     public string AdminApiKey { get; init; } = string.Empty;
-
 }
 
 public class CreateGhostSiteCommandHandler : IRequestHandler<CreateGhostSiteCommand, Guid>

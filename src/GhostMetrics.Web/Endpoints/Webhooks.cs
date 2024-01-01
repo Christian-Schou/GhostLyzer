@@ -80,7 +80,5 @@ public class Webhooks : EndpointGroupBase
         var domain = new Uri(postUrl);
         return domain.Host;
     }
-    
     #endregion
-    
 }

@@ -33,8 +33,6 @@ public static class Startup
 
         services.AddScoped<ApplicationDbContextInitializer>();
 
-        
-
         return services;
     }
 }
