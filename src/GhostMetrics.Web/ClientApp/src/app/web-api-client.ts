@@ -1049,7 +1049,7 @@ export class UsersClient implements IUsersClient {
 
 export interface IWebhooksClient {
     updateAuthor(): Observable<void>;
-    updatePost(): Observable<void>;
+    updatePost(siteId: string): Observable<void>;
 }
 
 @Injectable({
@@ -1109,8 +1109,12 @@ export class WebhooksClient implements IWebhooksClient {
         return _observableOf(null as any);
     }
 
-    updatePost(): Observable<void> {
-        let url_ = this.baseUrl + "/api/Webhooks/update-post";
+    updatePost(siteId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Webhooks/update-post?";
+        if (siteId === undefined || siteId === null)
+            throw new Error("The parameter 'siteId' must be defined and cannot be null.");
+        else
+            url_ += "siteId=" + encodeURIComponent("" + siteId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1715,9 +1719,9 @@ export class CreateGhostSiteCommand implements ICreateGhostSiteCommand {
     listId?: string;
     title!: string | undefined;
     note?: string | undefined;
-    apiUrl!: string | undefined;
-    contentApiKey!: string | undefined;
-    adminApiKey!: string | undefined;
+    apiUrl!: string;
+    contentApiKey!: string;
+    adminApiKey!: string;
 
     constructor(data?: ICreateGhostSiteCommand) {
         if (data) {
@@ -1762,9 +1766,9 @@ export interface ICreateGhostSiteCommand {
     listId?: string;
     title: string | undefined;
     note?: string | undefined;
-    apiUrl: string | undefined;
-    contentApiKey: string | undefined;
-    adminApiKey: string | undefined;
+    apiUrl: string;
+    contentApiKey: string;
+    adminApiKey: string;
 }
 
 export class ProblemDetails implements IProblemDetails {

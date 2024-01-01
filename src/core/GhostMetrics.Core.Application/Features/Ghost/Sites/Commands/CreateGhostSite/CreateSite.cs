@@ -9,9 +9,9 @@ public record CreateGhostSiteCommand : IRequest<Guid>
     public Guid ListId { get; init; }
     public string? Title { get; init; }
     public string? Note { get; init; }
-    public string? ApiUrl { get; init; }
-    public string? ContentApiKey { get; init; }
-    public string? AdminApiKey { get; init; }
+    public string ApiUrl { get; init; } = string.Empty;
+    public string ContentApiKey { get; init; } = string.Empty;
+    public string AdminApiKey { get; init; } = string.Empty;
 
 }
 
@@ -33,12 +33,7 @@ public class CreateGhostSiteCommandHandler : IRequestHandler<CreateGhostSiteComm
             Note = request.Note ?? "N/A",
             Paused = false,
             Indexed = false,
-            IntegrationDetails = new IntegrationDetail
-            {
-                ApiUrl = request.ApiUrl,
-                ContentApiKey = request.ContentApiKey,
-                AdminApiKey = request.AdminApiKey
-            }
+            IntegrationDetails = new IntegrationDetail(request.ApiUrl, request.ContentApiKey, request.AdminApiKey)
         };
         
         entity.AddDomainEvent(new GhostSiteCreatedEvent(entity));

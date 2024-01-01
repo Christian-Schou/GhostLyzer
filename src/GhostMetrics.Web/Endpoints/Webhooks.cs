@@ -28,7 +28,8 @@ public class Webhooks : EndpointGroupBase
     /// </summary>
     /// <param name="sender">Mediator</param>
     /// <param name="request">HttpRequest</param>
-    public async Task<IResult> UpdatePost(ISender sender, HttpRequest request)
+    /// <param name="siteId">GhostMetrics Site ID</param>
+    public async Task<IResult> UpdatePost(ISender sender, HttpRequest request, string siteId)
     {
         string postId = await _getGhostPostId(request);
         string ghostUrl = await _extractGhostSiteDomain(request);
@@ -39,7 +40,7 @@ public class Webhooks : EndpointGroupBase
 
     #region Authors
 
-    public async Task<IResult> UpdateAuthor(ISender sender, HttpRequest request)
+    public async Task<IResult> UpdateAuthor(ISender sender, HttpRequest request, string siteId)
     {
         string authorId = "123";
         string ghostUrl = await _extractGhostSiteDomain(request);

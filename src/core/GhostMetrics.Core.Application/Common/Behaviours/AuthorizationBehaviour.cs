@@ -7,12 +7,12 @@ namespace GhostMetrics.Core.Application.Common.Behaviours;
 
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
-    private readonly IUser _user;
+    private readonly IUserService _userService;
     private readonly IIdentityService _identityService;
 
-    public AuthorizationBehaviour(IUser user, IIdentityService identityService)
+    public AuthorizationBehaviour(IUserService userService, IIdentityService identityService)
     {
-        _user = user;
+        _userService = userService;
         _identityService = identityService;
     }
 
@@ -23,7 +23,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
         if (authorizeAttributes.Any())
         {
             // We want an authenticated user
-            if (_user.Id == null)
+            if (_userService.Id == null)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -39,7 +39,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
                 {
                     foreach (var role in roles)
                     {
-                        var isInRole = await _identityService.IsInRoleAsync(_user.Id, role.Trim());
+                        var isInRole = await _identityService.IsInRoleAsync(_userService.Id, role.Trim());
                         if (!isInRole) continue;
                         authorized = true;
                         break;
@@ -59,7 +59,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             {
                 foreach (var policy in authorizeAttributeWithPolicies.Select(x => x.Policy))
                 {
-                    var authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
+                    var authorized = await _identityService.AuthorizeAsync(_userService.Id, policy);
 
                     if (!authorized)
                     {

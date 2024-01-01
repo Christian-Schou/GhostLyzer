@@ -7,23 +7,23 @@ namespace GhostMetrics.Core.Application.Common.Behaviours;
 public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull
 {
     private readonly ILogger _logger;
-    private readonly IUser _user;
+    private readonly IUserService _userService;
     private readonly IIdentityService _identityService;
 
     public LoggingBehaviour(
         ILogger<TRequest> logger,
-        IUser user,
+        IUserService userService,
         IIdentityService identityService)
     {
         _logger = logger;
-        _user = user;
+        _userService = userService;
         _identityService = identityService;
     }
 
     public async Task Process(TRequest request, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
-        var userId = _user.Id ?? string.Empty;
+        var userId = _userService.Id ?? string.Empty;
         string? userName = string.Empty;
 
         if (!string.IsNullOrEmpty(userId))
