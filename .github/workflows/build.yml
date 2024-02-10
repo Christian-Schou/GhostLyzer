@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - '**'
   pull_request:
     branches: [ main ]
     paths-ignore:
@@ -19,13 +22,12 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v3
+    
+    - uses: actions/checkout@v4
       name: Checkout code
-
+      
     - name: Cache NuGet packages
       uses: actions/cache@v3
       with:
@@ -35,7 +37,7 @@ jobs:
           ${{ runner.os }}-nuget-
 
     - name: Install .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
 
     - name: Restore solution
       run: dotnet restore
